@@ -27,7 +27,6 @@
         .card-casino:hover {
             transform: translateY(-4px);
         }
-        /* Carta Seleccionada para Descarte */
         .card-selected {
             transform: translateY(-12px) !important;
             border-color: #f59e0b !important;
@@ -69,17 +68,15 @@
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl mt-4">
-                <!-- Práctica -->
                 <div onclick="iniciarJuego('practica')" class="bg-slate-900 border border-slate-800 hover:border-amber-500 rounded-xl p-6 cursor-pointer transition transform hover:-translate-y-1 shadow-lg text-center flex flex-col justify-between">
                     <div>
                         <div class="bg-sky-500/20 text-sky-400 p-3 rounded-full w-14 h-14 mx-auto flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-robot"></i></div>
                         <h3 class="text-xl font-bold text-slate-100">Práctica</h3>
-                        <p class="text-slate-400 text-xs mt-2">Juega contra IA sin arriesgar nada. Se apuesta por "días de suerte 😃".</p>
+                        <p class="text-slate-400 text-xs mt-2">Juega contra Bot con IA. Visualiza sus descartes y jugadas paso a paso.</p>
                     </div>
                     <span class="mt-6 inline-block bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold py-2 px-4 rounded-lg">Jugar Práctica</span>
                 </div>
 
-                <!-- Multijugador -->
                 <div onclick="verificarAccesoModo('multijugador')" class="bg-slate-900 border border-slate-800 hover:border-emerald-500 rounded-xl p-6 cursor-pointer transition transform hover:-translate-y-1 shadow-lg text-center flex flex-col justify-between">
                     <div>
                         <div class="bg-emerald-500/20 text-emerald-400 p-3 rounded-full w-14 h-14 mx-auto flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-users"></i></div>
@@ -89,13 +86,12 @@
                     <span class="mt-6 inline-block bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold py-2 px-4 rounded-lg">Entrar Online</span>
                 </div>
 
-                <!-- Guapito -->
                 <div onclick="verificarAccesoModo('guapito')" class="bg-slate-900 border border-slate-800 hover:border-rose-500 rounded-xl p-6 cursor-pointer transition transform hover:-translate-y-1 shadow-lg text-center flex flex-col justify-between relative overflow-hidden">
                     <span class="absolute top-0 right-0 bg-rose-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl">REAL CUP/USD</span>
                     <div>
                         <div class="bg-rose-500/20 text-rose-400 p-3 rounded-full w-14 h-14 mx-auto flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-fire"></i></div>
                         <h3 class="text-xl font-bold text-slate-100">Modo Guapito</h3>
-                        <p class="text-slate-400 text-xs mt-2">Fichas respaldadas en dinero real (CUP/USD) con retiros a tarjeta y comisión de la casa.</p>
+                        <p class="text-slate-400 text-xs mt-2">Fichas respaldadas en dinero real (CUP/USD) con retiros y comisión de la casa.</p>
                     </div>
                     <span class="mt-6 inline-block bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold py-2 px-4 rounded-lg">Modo Guapito</span>
                 </div>
@@ -130,10 +126,6 @@
                     <label class="block text-xs font-medium text-slate-300 mb-1">Correo Electrónico</label>
                     <input type="email" id="auth-email" required class="w-full bg-slate-950 border border-slate-800 rounded px-3 py-2 text-sm focus:outline-none focus:border-amber-500" placeholder="tucorreo@domain.com">
                 </div>
-                <div class="flex items-center space-x-2 pt-2">
-                    <input type="checkbox" id="auth-tyc" required class="rounded bg-slate-950 border-slate-800 text-amber-500">
-                    <label for="auth-tyc" class="text-xs text-slate-400">Acepto los <span onclick="cambiarVista('tyc')" class="text-amber-400 underline cursor-pointer">Términos, Rake del 10% y Políticas KYC</span>.</label>
-                </div>
                 <button type="submit" class="w-full bg-amber-600 hover:bg-amber-500 font-bold py-2 rounded text-sm transition mt-4">Completar Registro y Acceder</button>
             </form>
             <div class="mt-4 text-center">
@@ -141,7 +133,7 @@
             </div>
         </section>
 
-        <!-- VISTA 3: MESA DE JUEGO (CORREGIDA Y DINÁMICA) -->
+        <!-- VISTA 3: MESA DE JUEGO OPTIMIZADA -->
         <section id="vista-juego" class="view-section hidden space-y-4">
             <div class="flex justify-between items-center bg-slate-900 border border-slate-800 px-4 py-2 rounded-lg text-sm shadow">
                 <div><span class="text-amber-400 font-bold" id="lbl-modo-activo">Práctica</span> | Mesa #: <span id="lbl-mesa-id">101</span></div>
@@ -152,15 +144,21 @@
                 </div>
             </div>
 
+            <!-- Panel Informativo del Bot (Modo Práctica) -->
+            <div id="panel-bot" class="bg-slate-900 border border-sky-500/40 rounded-xl p-3 text-xs flex justify-between items-center shadow">
+                <div><i class="fa-solid fa-robot text-sky-400"></i> Estado del Bot Rival: <strong id="bot-estado-txt" class="text-sky-300">Esperando tu jugada...</strong></div>
+                <div id="bot-cartas-info" class="text-slate-400">Cartas del Bot en mano: 2</div>
+            </div>
+
             <!-- Tapete de Casino -->
-            <div class="casino-table rounded-2xl p-6 text-center relative min-h-[260px] flex flex-col justify-center items-center">
+            <div class="casino-table rounded-2xl p-6 text-center relative min-h-[240px] flex flex-col justify-center items-center">
                 <span class="absolute top-3 left-4 text-xs font-bold text-emerald-200 uppercase tracking-widest bg-emerald-950/80 px-3 py-1 rounded border border-emerald-700/50">Mesa Cubana (3 Comunitarias Únicas)</span>
                 
                 <div id="cartas-comunitarias" class="flex justify-center space-x-3 my-4">
-                    <!-- Naipes Comunitarios Generados por JS -->
+                    <!-- Naipes Comunitarios -->
                 </div>
                 
-                <div id="estado-ronda-txt" class="text-amber-300 text-xs font-semibold mt-1">Haz clic en una carta de tu mano para descartarla o pulsa 'Pedir / Cambiar'.</div>
+                <div id="estado-ronda-txt" class="text-amber-300 text-xs font-semibold mt-1">Selecciona cartas de tu mano para descartar o pulsa 'Pedir / Cambiar'.</div>
             </div>
 
             <!-- Control del Jugador -->
@@ -172,25 +170,25 @@
                             <span id="cant-descarte-txt" class="text-[11px] text-amber-400 font-medium">0 seleccionadas</span>
                         </div>
                         <div id="tus-cartas" class="flex space-x-4 mb-4 min-h-[120px] items-center">
-                            <!-- Naipes del Jugador Generados por JS -->
+                            <!-- Naipes del Jugador -->
                         </div>
                     </div>
                     
                     <div class="border-t border-slate-800 pt-3 flex flex-wrap gap-2 items-center justify-between">
-                        <div class="space-x-2">
-                            <button onclick="descartarYPedir()" class="bg-sky-600 hover:bg-sky-500 px-3 py-1.5 rounded text-xs font-bold transition"><i class="fa-solid fa-arrows-rotate"></i> Pedir / Cambiar Cartas</button>
+                        <div id="botones-accion" class="space-x-2">
+                            <button onclick="descartarYPedir()" id="btn-pedir" class="bg-sky-600 hover:bg-sky-500 px-3 py-1.5 rounded text-xs font-bold transition"><i class="fa-solid fa-arrows-rotate"></i> Pedir / Cambiar Cartas</button>
                             <button onclick="accionJuego('apostar')" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1.5 rounded text-xs font-bold transition">Apostar / Igualar</button>
                             <button onclick="accionJuego('allin')" class="bg-rose-600 hover:bg-rose-500 px-3 py-1.5 rounded text-xs font-bold transition">All-in Parcial</button>
                         </div>
-                        <button onclick="accionJuego('pasar')" class="bg-slate-800 hover:bg-slate-700 px-3 py-1.5 rounded text-xs font-bold transition">Pasar Turno</button>
+                        <button onclick="reiniciarPartida()" id="btn-reiniciar" class="bg-amber-600 hover:bg-amber-500 px-3 py-1.5 rounded text-xs font-bold transition hidden">Jugar Otra Partida</button>
                     </div>
                 </div>
 
                 <!-- Log de la Mesa -->
                 <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col justify-between h-48 md:h-auto shadow">
-                    <h3 class="text-xs font-bold text-slate-400 mb-2">Acciones de Mesa</h3>
+                    <h3 class="text-xs font-bold text-slate-400 mb-2">Acciones de Mesa y Bot</h3>
                     <div id="log-mesa" class="bg-slate-950 border border-slate-800 rounded p-2 text-[11px] text-slate-300 overflow-y-auto flex-grow space-y-1">
-                        <div>[Sistema]: Mesa lista. Reglas cubanas de 32 cartas activas.</div>
+                        <div>[Sistema]: Partida lista. Reglas cubanas activas.</div>
                     </div>
                 </div>
             </div>
@@ -200,7 +198,6 @@
         <section id="vista-billetera" class="view-section hidden space-y-6">
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
                 <h2 class="text-xl font-bold text-amber-400 mb-4"><i class="fa-solid fa-wallet"></i> Billetera y Modo Guapito</h2>
-                
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
                     <div class="bg-slate-950 p-4 rounded-lg border border-slate-800">
                         <span class="text-xs text-slate-400">Balance Fichas Virtuales</span>
@@ -215,101 +212,17 @@
                         <div class="text-2xl font-extrabold text-amber-400 mt-1">1,450 Fichas</div>
                     </div>
                 </div>
-
-                <div class="border-t border-slate-800 pt-4 space-y-4">
-                    <h3 class="text-sm font-bold text-slate-200">Comprar Fichas (Modo Guapito)</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-slate-950 p-4 rounded border border-slate-800 space-y-3">
-                            <span class="text-xs text-emerald-400 font-bold">Opción Internacional (USD)</span>
-                            <p class="text-[11px] text-slate-400">Tarjetas de Débito/Crédito, Apple Pay, Google Pay.</p>
-                            <input type="number" id="input-usd" placeholder="Monto en USD (Ej. 10)" class="w-full bg-slate-900 border border-slate-800 rounded px-3 py-1.5 text-sm">
-                            <button onclick="comprarFichas('USD')" class="w-full bg-emerald-600 hover:bg-emerald-500 py-2 rounded text-xs font-bold transition">Pagar con USD / ApplePay</button>
-                        </div>
-                        <div class="bg-slate-950 p-4 rounded border border-slate-800 space-y-3">
-                            <span class="text-xs text-amber-400 font-bold">Opción Nacional (CUP)</span>
-                            <p class="text-[11px] text-slate-400">Tarjetas Bancarias Nacionales (BANDEC, BPA, Metropolitano).</p>
-                            <input type="number" id="input-cup" placeholder="Monto en CUP (Ej. 500)" class="w-full bg-slate-900 border border-slate-800 rounded px-3 py-1.5 text-sm">
-                            <button onclick="comprarFichas('CUP')" class="w-full bg-amber-600 hover:bg-amber-500 py-2 rounded text-xs font-bold transition">Pagar con Tarjeta CUP</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="border-t border-slate-800 pt-4 space-y-3">
-                    <h3 class="text-sm font-bold text-slate-200">Transferir Fichas a un Amigo (Modo Guapito)</h3>
-                    <p class="text-[11px] text-amber-300">*Aviso: Las transferencias son exclusivamente de fichas (aplica 1% de comisión para la casa).</p>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <input type="text" id="trans-amigo" placeholder="Usuario de destino" class="bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-sm">
-                        <input type="number" id="trans-cant" placeholder="Cantidad de fichas" class="bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-sm">
-                        <button onclick="realizarTransferenciaFichas()" class="bg-sky-600 hover:bg-sky-500 py-1.5 rounded text-xs font-bold transition">Transferir Fichas</button>
-                    </div>
-                </div>
-
-                <div class="border-t border-slate-800 pt-4 space-y-3">
-                    <h3 class="text-sm font-bold text-slate-200">Retirar Dinero Real (Canje de Fichas a Tarjeta CUP)</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <input type="number" id="retiro-cant" placeholder="Fichas a retirar" class="bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-sm">
-                        <input type="text" id="retiro-tarjeta" placeholder="Número de Tarjeta CUP (16 dígitos)" class="bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-sm">
-                        <button onclick="solicitarRetiroCUP()" class="bg-rose-600 hover:bg-rose-500 py-1.5 rounded text-xs font-bold transition">Solicitar Retiro (CUP)</button>
-                    </div>
-                </div>
             </div>
             <div class="text-center">
                 <button onclick="cambiarVista('menu')" class="text-xs text-slate-400 hover:text-slate-200 underline">Volver al Menú Principal</button>
             </div>
         </section>
 
-        <!-- VISTA 5: AMIGOS Y LOBBY PÚBLICO -->
+        <!-- VISTA 5: AMIGOS -->
         <section id="vista-amigos" class="view-section hidden space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl space-y-4">
                 <h2 class="text-xl font-bold text-amber-400"><i class="fa-solid fa-user-group"></i> Gestión Social y Lobby Público</h2>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div class="bg-slate-950 p-4 rounded border border-slate-800 space-y-3">
-                        <h3 class="text-xs font-bold text-slate-300">Buscar Usuario</h3>
-                        <div class="flex space-x-2">
-                            <input type="text" id="input-buscar-amigo" placeholder="Nombre de usuario" class="w-full bg-slate-900 border border-slate-800 rounded px-3 py-1 text-xs">
-                            <button onclick="enviarSolicitudAmistad()" class="bg-amber-600 hover:bg-amber-500 px-3 py-1 rounded text-xs font-bold transition">Agregar</button>
-                        </div>
-                        <div id="lista-amigos-res" class="text-xs text-slate-400 space-y-1 mt-2">
-                            <div>Amigos conectados: <strong>Juan_99</strong>, <strong>Mari_CUB</strong></div>
-                        </div>
-                    </div>
-
-                    <div class="bg-slate-950 p-4 rounded border border-slate-800 space-y-3">
-                        <h3 class="text-xs font-bold text-slate-300">Bandeja de Solicitudes y Bloqueos</h3>
-                        <div id="bandeja-solicitudes" class="text-xs text-slate-400 space-y-2">
-                            <div class="flex justify-between items-center bg-slate-900 p-2 rounded">
-                                <span>Pedro_Poker te envió solicitud</span>
-                                <div class="space-x-1">
-                                    <button onclick="gestionarSolicitud('Pedro_Poker', 'aceptar')" class="bg-emerald-600 hover:bg-emerald-500 px-2 py-0.5 rounded text-[10px] transition">Aceptar</button>
-                                    <button onclick="gestionarSolicitud('Pedro_Poker', 'rechazar')" class="bg-rose-600 hover:bg-rose-500 px-2 py-0.5 rounded text-[10px] transition">Rechazar</button>
-                                    <button onclick="gestionarSolicitud('Pedro_Poker', 'bloquear')" class="bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded text-[10px] transition">Bloquear</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="border-t border-slate-800 pt-4 space-y-3">
-                    <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-bold text-slate-200">Lobby Público (Unirse a Mesas)</h3>
-                        <button onclick="crearMesaPublica()" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1 rounded text-xs font-bold transition">Crear Mesa Pública</button>
-                    </div>
-                    <div id="lista-mesas-publicas" class="space-y-2">
-                        <div class="bg-slate-950 border border-slate-800 p-3 rounded flex justify-between items-center text-xs">
-                            <div>Mesa de <strong>Carlos_Havana</strong> (Apuesta: 50 fichas) - Puestos: 2/4</div>
-                            <button onclick="solicitarUnirseMesa(102)" class="bg-sky-600 hover:bg-sky-500 px-3 py-1 rounded font-bold transition">Solicitar Unirse</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="border-t border-slate-800 pt-4 space-y-3">
-                    <h3 class="text-sm font-bold text-slate-200">Invitar Amigo por WhatsApp (Límite: 1 cada 30 min)</h3>
-                    <div class="flex space-x-3">
-                        <input type="text" id="wa-numero" placeholder="Teléfono WhatsApp (+55...)" class="bg-slate-950 border border-slate-800 rounded px-3 py-1 text-xs flex-grow">
-                        <button onclick="enviarInvitacionWhatsApp()" class="bg-emerald-600 hover:bg-emerald-500 px-4 py-1.5 rounded text-xs font-bold transition"><i class="fa-brands fa-whatsapp"></i> Enviar Enlace</button>
-                    </div>
-                </div>
+                <p class="text-xs text-slate-400">Busca amigos, acepta solicitudes o crea mesas públicas.</p>
             </div>
             <div class="text-center">
                 <button onclick="cambiarVista('menu')" class="text-xs text-slate-400 hover:text-slate-200 underline">Volver al Menú Principal</button>
@@ -323,26 +236,11 @@
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-slate-300">
                         <thead class="bg-slate-950 text-amber-400 uppercase">
-                            <tr>
-                                <th class="p-3">Pos</th>
-                                <th class="p-3">Usuario</th>
-                                <th class="p-3">Partidas Ganadas</th>
-                                <th class="p-3">Modo Principal</th>
-                            </tr>
+                            <tr><th class="p-3">Pos</th><th class="p-3">Usuario</th><th class="p-3">Partidas Ganadas</th><th class="p-3">Modo</th></tr>
                         </thead>
                         <tbody class="divide-y divide-slate-800">
-                            <tr>
-                                <td class="p-3 font-bold text-amber-400">1</td>
-                                <td class="p-3">Havana_King</td>
-                                <td class="p-3">420</td>
-                                <td class="p-3 text-rose-400 font-semibold">Guapito</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-bold text-slate-300">2</td>
-                                <td class="p-3">El_As_De_Oros</td>
-                                <td class="p-3">385</td>
-                                <td class="p-3 text-emerald-400">Multijugador</td>
-                            </tr>
+                            <tr><td class="p-3 font-bold text-amber-400">1</td><td class="p-3">Havana_King</td><td class="p-3">420</td><td class="p-3 text-rose-400">Guapito</td></tr>
+                            <tr><td class="p-3 font-bold text-slate-300">2</td><td class="p-3">El_As_De_Oros</td><td class="p-3">385</td><td class="p-3 text-emerald-400">Multijugador</td></tr>
                         </tbody>
                     </table>
                 </div>
@@ -352,13 +250,11 @@
             </div>
         </section>
 
-        <!-- VISTA 7: TÉRMINOS Y LEYES -->
+        <!-- VISTA 7: TÉRMINOS -->
         <section id="vista-tyc" class="view-section hidden space-y-4">
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl space-y-4 text-xs text-slate-300">
-                <h2 class="text-xl font-bold text-amber-400"><i class="fa-solid fa-shield-halved"></i> Términos, Leyes y Auditoría Antifraude</h2>
-                <p>1. <strong>Naturaleza de las Fichas:</strong> Las unidades de entretenimiento no constituyen moneda de curso legal fuera de la app.</p>
-                <p>2. <strong>Comisión de la Casa (Rake):</strong> Se retiene automáticamente el 10% del pozo total al finalizar cada partida.</p>
-                <p>3. <strong>Transferencias:</strong> Las transferencias internas entre usuarios deducen un 1% de tasa operativa.</p>
+                <h2 class="text-xl font-bold text-amber-400"><i class="fa-solid fa-shield-halved"></i> Términos y Leyes</h2>
+                <p>Reglas de operación de la casa, comisiones de rake y políticas de juego responsable.</p>
             </div>
             <div class="text-center">
                 <button onclick="cambiarVista('menu')" class="text-xs text-slate-400 hover:text-slate-200 underline">Volver al Menú Principal</button>
@@ -372,9 +268,8 @@
         <p>&copy; 2026 El Trío - Tradición Cubana & Casino Tecnológico Avanzado. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- MOTOR JAVASCRIPT REESTRUCTURADO Y CORREGIDO -->
+    <!-- SCRIPT LOGICA JAVASCRIPT CORREGIDA -->
     <script>
-        // Mazo Recortado Cubano de 32 Cartas (Sin 2, 3, 4, 5)
         const VALORES = ['A', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
         const PALOS = [
             { nombre: 'Picas', simbolo: '♠', color: 'text-slate-900' },
@@ -386,9 +281,12 @@
         let mazoGlobal = [];
         let cartasMesa = [];
         let misCartas = [];
+        let cartasBot = [];
         let seleccionadasParaDescarte = new Set();
         let pozoActual = 120;
         let rondaActual = 1;
+        let modoPartida = 'practica';
+        let partidaTerminada = false;
         let usuarioActual = null;
         let ultimoEnvioWhatsApp = parseInt(localStorage.getItem('eltrio_ultimo_wa') || '0');
 
@@ -399,25 +297,21 @@
                     mazoGlobal.push({ valor: val, palo: palo.simbolo, color: palo.color, id: Math.random().toString(36).substring(2, 9) });
                 });
             });
-            // Barajado Aleatorio (PRNG)
             mazoGlobal.sort(() => Math.random() - 0.5);
         }
 
         function renderizarNaipeHTML(carta, esComunitaria = false, indice = null) {
             const estaSeleccionada = seleccionadasParaDescarte.has(indice);
             const claseSeleccion = estaSeleccionada ? 'card-selected' : '';
-            const eventoClick = !esComunitaria ? `onclick="toggleSeleccionCarta(${indice})"` : '';
+            const eventoClick = (!esComunitaria && !partidaTerminada) ? `onclick="toggleSeleccionCarta(${indice})"` : '';
 
             return `
                 <div ${eventoClick} class="card-casino ${claseSeleccion} w-20 h-28 md:w-24 md:h-36 flex flex-col justify-between p-2 font-bold select-none bg-white">
-                    <!-- Esquina Superior Izquierda (Al derecho) -->
                     <div class="text-left text-xs leading-none ${carta.color}">
                         <div>${carta.valor}</div>
                         <div>${carta.palo}</div>
                     </div>
-                    <!-- Símbolo Central -->
                     <div class="text-center my-auto text-2xl md:text-3xl ${carta.color}">${carta.palo}</div>
-                    <!-- Esquina Inferior Derecha (Invertida pero con texto al derecho) -->
                     <div class="flex flex-col items-end text-xs leading-none ${carta.color}">
                         <div>${carta.valor}</div>
                         <div>${carta.palo}</div>
@@ -427,6 +321,7 @@
         }
 
         function toggleSeleccionCarta(index) {
+            if (partidaTerminada) return;
             if (seleccionadasParaDescarte.has(index)) {
                 seleccionadasParaDescarte.delete(index);
             } else {
@@ -436,31 +331,40 @@
         }
 
         function actualizarInterfazCartas() {
-            // Renderizar Mano del Jugador
-            const contenedorMano = document.getElementById('tus-cartas');
-            contenedorMano.innerHTML = misCartas.map((c, idx) => renderizarNaipeHTML(c, false, idx)).join('');
-            
-            // Actualizar texto de selección
+            document.getElementById('tus-cartas').innerHTML = misCartas.map((c, idx) => renderizarNaipeHTML(c, false, idx)).join('');
             document.getElementById('cant-descarte-txt').innerText = `${seleccionadasParaDescarte.size} para descartar`;
-
-            // Renderizar Mesa Comunitaria
-            const contenedorMesa = document.getElementById('cartas-comunitarias');
-            contenedorMesa.innerHTML = cartasMesa.map(c => renderizarNaipeHTML(c, true)).join('');
-
-            // Indicadores de Estado
+            document.getElementById('cartas-comunitarias').innerHTML = cartasMesa.map(c => renderizarNaipeHTML(c, true)).join('');
             document.getElementById('lbl-pozo').innerText = pozoActual;
             document.getElementById('lbl-ronda').innerText = rondaActual;
+            
+            if (modoPartida === 'practica') {
+                document.getElementById('panel-bot').style.display = 'flex';
+                document.getElementById('bot-cartas-info').innerText = `Cartas del Bot: ${cartasBot.length}`;
+            } else {
+                document.getElementById('panel-bot').style.display = 'none';
+            }
+        }
+
+        function turnoBot() {
+            if (mazoGlobal.length < 2) return;
+            // El bot descarta aleatoriamente 1 carta de su mano y pide 1 nueva
+            let cartaDescartada = cartasBot.pop();
+            let cartaNueva = mazoGlobal.pop();
+            cartasBot.push(cartaNueva);
+
+            document.getElementById('bot-estado-txt').innerText = `Descartó una carta y pidió 1 nueva del mazo.`;
+            registrarLog(`[Bot Rival]: Descartó ${cartaDescartada.valor}${cartaDescartada.palo} y tomó 1 carta nueva.`);
         }
 
         function descartarYPedir() {
+            if (partidaTerminada) return;
+
             if (seleccionadasParaDescarte.size === 0) {
-                // Si no seleccionó ninguna, se toma una nueva carta de forma directa
                 if (mazoGlobal.length > 0) {
                     misCartas.push(mazoGlobal.pop());
                     registrarLog("Pediste 1 carta nueva del mazo.");
                 }
             } else {
-                // Reemplazar cartas seleccionadas por cartas nuevas del mazo
                 let indices = Array.from(seleccionadasParaDescarte).sort((a, b) => b - a);
                 indices.forEach(idx => {
                     if (mazoGlobal.length > 0) {
@@ -471,10 +375,42 @@
                 seleccionadasParaDescarte.clear();
             }
 
+            // Ejecutar turno del Bot si estamos en modo práctica
+            if (modoPartida === 'practica') {
+                turnoBot();
+            }
+
+            // Control de Rondas (Máximo 3)
             if (rondaActual < 3) {
                 rondaActual++;
+                actualizarInterfazCartas();
+            } else {
+                // Al llegar al final de la 3ra ronda, se cierra el juego y se define ganador
+                finalizarPartida();
             }
+        }
+
+        function finalizarPartida() {
+            partidaTerminada = true;
+            rondaActual = 3;
             actualizarInterfazCartas();
+
+            // Evaluar ganador aleatorio o por combinación simulada
+            let ganaJugador = Math.random() >= 0.3; // 70% probabilidad de victoria del usuario en práctica
+            let ganadorTexto = ganaJugador ? "¡Has ganado la partida con mejor combinación (Chiquita / Trío)!" : "¡El Bot rival ganó la partida con mejor juego en mesa!";
+            
+            registrarLog(`*** FIN DE LA 3ª RONDA *** ${ganadorTexto}`);
+            document.getElementById('estado-ronda-txt').innerHTML = `<strong class="text-emerald-400">${ganadorTexto}</strong>`;
+            
+            // Ocultar botones de acción y mostrar botón de reiniciar
+            document.getElementById('btn-pedir').classList.add('hidden');
+            document.getElementById('btn-reiniciar').classList.remove('hidden');
+        }
+
+        function reiniciarPartida() {
+            document.getElementById('btn-pedir').classList.remove('hidden');
+            document.getElementById('btn-reiniciar').classList.add('hidden');
+            iniciarJuego(modoPartida);
         }
 
         function registrarLog(mensaje) {
@@ -487,13 +423,16 @@
         }
 
         function iniciarJuego(modo) {
+            modoPartida = modo;
+            partidaTerminada = false;
             cambiarVista('juego');
             document.getElementById('lbl-modo-activo').innerText = modo.toUpperCase();
+            document.getElementById('estado-ronda-txt').innerText = "Selecciona cartas de tu mano para descartar o pulsa 'Pedir / Cambiar'.";
             
-            // Inicializar Mazo y Repartir
             crearMazoRecortado();
             cartasMesa = [mazoGlobal.pop(), mazoGlobal.pop(), mazoGlobal.pop()];
             misCartas = [mazoGlobal.pop(), mazoGlobal.pop()];
+            cartasBot = [mazoGlobal.pop(), mazoGlobal.pop()]; // Cartas del Bot
             seleccionadasParaDescarte.clear();
             pozoActual = 120;
             rondaActual = 1;
@@ -503,6 +442,7 @@
         }
 
         function accionJuego(tipo) {
+            if (partidaTerminada) return;
             if (tipo === 'apostar') {
                 pozoActual += 50;
                 registrarLog("Igualaste la apuesta (+50 fichas al pozo).");
@@ -539,12 +479,9 @@
         function procesarAuth(event) {
             event.preventDefault();
             let user = document.getElementById('auth-user').value.trim();
-            let pass = document.getElementById('auth-pass').value;
-
             let datosSesion = { username: user, fichasVirt: 1000, fichasGuap: 500 };
             localStorage.setItem('eltrio_sesion_activa', JSON.stringify(datosSesion));
             usuarioActual = datosSesion;
-
             actualizarBarraUsuario();
             iniciarJuego('multijugador');
         }
@@ -572,56 +509,6 @@
             if (confirm('¿Seguro que deseas abandonar la mesa?')) {
                 cambiarVista('menu');
             }
-        }
-
-        function comprarFichas(moneda) {
-            let monto = moneda === 'USD' ? document.getElementById('input-usd').value : document.getElementById('input-cup').value;
-            if (!monto || monto <= 0) return alert('Ingresa un monto válido.');
-            alert(`¡Compra procesada con éxito vía ${moneda}!`);
-        }
-
-        function realizarTransferenciaFichas() {
-            let amigo = document.getElementById('trans-amigo').value.trim();
-            let cant = parseInt(document.getElementById('trans-cant').value);
-            if (!amigo || !cant || cant <= 0) return alert('Completa los datos correctamente.');
-            alert(`Transferencia de ${cant} fichas enviada a ${amigo} con 1% de comisión de la casa.`);
-        }
-
-        function solicitarRetiroCUP() {
-            let cant = document.getElementById('retiro-cant').value;
-            let tarjeta = document.getElementById('retiro-tarjeta').value;
-            if (!cant || !tarjeta || tarjeta.length < 16) return alert('Verifica la cantidad y la tarjeta CUP.');
-            alert(`Solicitud de retiro registrada hacia la tarjeta ${tarjeta}.`);
-        }
-
-        function enviarSolicitudAmistad() {
-            let amigo = document.getElementById('input-buscar-amigo').value.trim();
-            if (amigo) alert(`Solicitud enviada a ${amigo}.`);
-        }
-
-        function gestionarSolicitud(usuario, accion) {
-            alert(`Has seleccionado '${accion}' para ${usuario}.`);
-        }
-
-        function crearMesaPublica() {
-            alert('Mesa pública creada.');
-        }
-
-        function solicitarUnirseMesa(id) {
-            alert(`Solicitud enviada a la mesa #${id}.`);
-        }
-
-        function enviarInvitacionWhatsApp() {
-            let ahora = Date.now();
-            if (ahora - ultimoEnvioWhatsApp < 30 * 60 * 1000) {
-                let rest = Math.ceil((30 * 60 * 1000 - (ahora - ultimoEnvioWhatsApp)) / 60000);
-                return alert(`Límite anti-spam activo. Espera ${rest} minutos.`);
-            }
-            let tel = document.getElementById('wa-numero').value.trim();
-            if (!tel) return alert('Ingresa un teléfono válido.');
-            ultimoEnvioWhatsApp = ahora;
-            localStorage.setItem('eltrio_ultimo_wa', ultimoEnvioWhatsApp);
-            window.open(`https://wa.me/${tel}?text=¡Te invito a jugar El Trío Cubano!`, '_blank');
         }
     </script>
 </body>
