@@ -7,39 +7,44 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Estilo Paño de Casino Verde Profesional Optimizado */
+        /* Estilo Tapete Verde Casino */
         .casino-table {
             background: radial-gradient(circle, #065f46 0%, #022c22 100%);
             box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.7);
             border: 8px solid #0f172a;
         }
-        /* Estilo de Carta de Casino Clásica Fluida */
+        /* Estilo Naipe Clásico */
         .card-casino {
             background: #ffffff;
-            color: #0f172a;
-            border-radius: 10px;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
+            border-radius: 8px;
+            box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.35);
+            transition: all 0.2s ease;
             position: relative;
-            overflow: hidden;
-            border: 1px solid #cbd5e1;
+            user-select: none;
+            border: 2px solid #cbd5e1;
+            cursor: pointer;
         }
         .card-casino:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.5);
+            transform: translateY(-4px);
+        }
+        /* Carta Seleccionada para Descarte */
+        .card-selected {
+            transform: translateY(-12px) !important;
+            border-color: #f59e0b !important;
+            box-shadow: 0 0 15px rgba(245, 158, 11, 0.8) !important;
         }
         .view-section {
-            animation: fadeIn 0.25s ease-in-out;
+            animation: fadeIn 0.2s ease-in-out;
         }
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950">
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
 
-    <!-- HEADER / NAVEGACIÓN -->
+    <!-- HEADER -->
     <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex flex-wrap justify-between items-center shadow-md sticky top-0 z-50">
         <div class="flex items-center space-x-3 cursor-pointer" onclick="cambiarVista('menu')">
             <i class="fa-solid fa-diamond text-red-500 text-2xl"></i>
@@ -103,7 +108,7 @@
             </div>
         </section>
 
-        <!-- VISTA 2: AUTENTICACIÓN / REGISTRO OBLIGATORIO -->
+        <!-- VISTA 2: REGISTRO / LOGIN -->
         <section id="vista-auth" class="view-section hidden max-w-md mx-auto bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl my-6">
             <h2 id="auth-title" class="text-2xl font-bold text-amber-400 mb-2 text-center">Registro Obligatorio</h2>
             <p class="text-slate-400 text-xs text-center mb-6">Protege tus fichas, tu saldo y tu historial en los modos competitivos.</p>
@@ -136,7 +141,7 @@
             </div>
         </section>
 
-        <!-- VISTA 3: MESA DE JUEGO (EL TRÍO - PAÑO VERDE Y CARTAS CLÁSICAS) -->
+        <!-- VISTA 3: MESA DE JUEGO (CORREGIDA Y DINÁMICA) -->
         <section id="vista-juego" class="view-section hidden space-y-4">
             <div class="flex justify-between items-center bg-slate-900 border border-slate-800 px-4 py-2 rounded-lg text-sm shadow">
                 <div><span class="text-amber-400 font-bold" id="lbl-modo-activo">Práctica</span> | Mesa #: <span id="lbl-mesa-id">101</span></div>
@@ -147,28 +152,33 @@
                 </div>
             </div>
 
-            <!-- Zona de la Mesa con Paño Verde Profesional -->
-            <div class="casino-table rounded-2xl p-8 text-center relative min-h-[260px] flex flex-col justify-center items-center shadow-inner">
-                <span class="absolute top-3 left-4 text-xs font-bold text-emerald-200 uppercase tracking-widest bg-emerald-950/70 px-3 py-1 rounded border border-emerald-700/50">Mesa Cubana (Cartas Comunitarias Únicas)</span>
-                <div id="cartas-comunitarias" class="flex justify-center space-x-4 my-4">
-                    <!-- Dinámico con Estilo de Cartas Clásicas -->
+            <!-- Tapete de Casino -->
+            <div class="casino-table rounded-2xl p-6 text-center relative min-h-[260px] flex flex-col justify-center items-center">
+                <span class="absolute top-3 left-4 text-xs font-bold text-emerald-200 uppercase tracking-widest bg-emerald-950/80 px-3 py-1 rounded border border-emerald-700/50">Mesa Cubana (3 Comunitarias Únicas)</span>
+                
+                <div id="cartas-comunitarias" class="flex justify-center space-x-3 my-4">
+                    <!-- Naipes Comunitarios Generados por JS -->
                 </div>
-                <div id="estado-ronda-txt" class="text-amber-300 text-xs font-semibold mt-2 tracking-wide">Esperando inicio de apuesta inicial obligatoria...</div>
+                
+                <div id="estado-ronda-txt" class="text-amber-300 text-xs font-semibold mt-1">Haz clic en una carta de tu mano para descartarla o pulsa 'Pedir / Cambiar'.</div>
             </div>
 
-            <!-- Zona de Jugadores y Acciones -->
+            <!-- Control del Jugador -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <!-- Jugadores en la mesa -->
                 <div class="md:col-span-3 bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col justify-between shadow">
                     <div>
-                        <h3 class="text-xs font-bold text-slate-400 mb-3">Tus Cartas en Mano</h3>
-                        <div id="tus-cartas" class="flex space-x-4 mb-4">
-                            <!-- Dinámico con Estilo de Cartas Clásicas -->
+                        <div class="flex justify-between items-center mb-3">
+                            <h3 class="text-xs font-bold text-slate-400">Tus Cartas en Mano (Haz clic para seleccionar descarte)</h3>
+                            <span id="cant-descarte-txt" class="text-[11px] text-amber-400 font-medium">0 seleccionadas</span>
+                        </div>
+                        <div id="tus-cartas" class="flex space-x-4 mb-4 min-h-[120px] items-center">
+                            <!-- Naipes del Jugador Generados por JS -->
                         </div>
                     </div>
+                    
                     <div class="border-t border-slate-800 pt-3 flex flex-wrap gap-2 items-center justify-between">
                         <div class="space-x-2">
-                            <button onclick="accionJuego('pedir')" class="bg-sky-600 hover:bg-sky-500 px-3 py-1.5 rounded text-xs font-bold transition">Pedir / Cambiar</button>
+                            <button onclick="descartarYPedir()" class="bg-sky-600 hover:bg-sky-500 px-3 py-1.5 rounded text-xs font-bold transition"><i class="fa-solid fa-arrows-rotate"></i> Pedir / Cambiar Cartas</button>
                             <button onclick="accionJuego('apostar')" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1.5 rounded text-xs font-bold transition">Apostar / Igualar</button>
                             <button onclick="accionJuego('allin')" class="bg-rose-600 hover:bg-rose-500 px-3 py-1.5 rounded text-xs font-bold transition">All-in Parcial</button>
                         </div>
@@ -176,17 +186,17 @@
                     </div>
                 </div>
 
-                <!-- Chat / Log de mesa -->
+                <!-- Log de la Mesa -->
                 <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col justify-between h-48 md:h-auto shadow">
                     <h3 class="text-xs font-bold text-slate-400 mb-2">Acciones de Mesa</h3>
                     <div id="log-mesa" class="bg-slate-950 border border-slate-800 rounded p-2 text-[11px] text-slate-300 overflow-y-auto flex-grow space-y-1">
-                        <div>[Sistema]: Partida iniciada bajo reglas cubanas.</div>
+                        <div>[Sistema]: Mesa lista. Reglas cubanas de 32 cartas activas.</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- VISTA 4: BILLETERA Y MODO GUAPITO -->
+        <!-- VISTA 4: BILLETERA -->
         <section id="vista-billetera" class="view-section hidden space-y-6">
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
                 <h2 class="text-xl font-bold text-amber-400 mb-4"><i class="fa-solid fa-wallet"></i> Billetera y Modo Guapito</h2>
@@ -206,7 +216,6 @@
                     </div>
                 </div>
 
-                <!-- Recarga Multidivisa -->
                 <div class="border-t border-slate-800 pt-4 space-y-4">
                     <h3 class="text-sm font-bold text-slate-200">Comprar Fichas (Modo Guapito)</h3>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -225,10 +234,9 @@
                     </div>
                 </div>
 
-                <!-- Transferencias Internas de Fichas (1% Comisión) -->
                 <div class="border-t border-slate-800 pt-4 space-y-3">
                     <h3 class="text-sm font-bold text-slate-200">Transferir Fichas a un Amigo (Modo Guapito)</h3>
-                    <p class="text-[11px] text-amber-300">*Aviso: Las transferencias son exclusivamente de fichas (aplica 1% de comisión para la casa). El dinero real solo entra/sale con la cuenta oficial de la app.</p>
+                    <p class="text-[11px] text-amber-300">*Aviso: Las transferencias son exclusivamente de fichas (aplica 1% de comisión para la casa).</p>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <input type="text" id="trans-amigo" placeholder="Usuario de destino" class="bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-sm">
                         <input type="number" id="trans-cant" placeholder="Cantidad de fichas" class="bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-sm">
@@ -236,7 +244,6 @@
                     </div>
                 </div>
 
-                <!-- Extracción / Retiro a Tarjeta CUP (KYC requerido) -->
                 <div class="border-t border-slate-800 pt-4 space-y-3">
                     <h3 class="text-sm font-bold text-slate-200">Retirar Dinero Real (Canje de Fichas a Tarjeta CUP)</h3>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -256,7 +263,6 @@
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl space-y-6">
                 <h2 class="text-xl font-bold text-amber-400"><i class="fa-solid fa-user-group"></i> Gestión Social y Lobby Público</h2>
                 
-                <!-- Buscador y Solicitudes -->
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-slate-950 p-4 rounded border border-slate-800 space-y-3">
                         <h3 class="text-xs font-bold text-slate-300">Buscar Usuario</h3>
@@ -284,10 +290,9 @@
                     </div>
                 </div>
 
-                <!-- Lobby Público de Mesas -->
                 <div class="border-t border-slate-800 pt-4 space-y-3">
                     <div class="flex justify-between items-center">
-                        <h3 class="text-sm font-bold text-slate-200">Lobby Público (Unirse a Mesas de Desconocidos)</h3>
+                        <h3 class="text-sm font-bold text-slate-200">Lobby Público (Unirse a Mesas)</h3>
                         <button onclick="crearMesaPublica()" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1 rounded text-xs font-bold transition">Crear Mesa Pública</button>
                     </div>
                     <div id="lista-mesas-publicas" class="space-y-2">
@@ -298,7 +303,6 @@
                     </div>
                 </div>
 
-                <!-- Invitación por WhatsApp con anti-spam -->
                 <div class="border-t border-slate-800 pt-4 space-y-3">
                     <h3 class="text-sm font-bold text-slate-200">Invitar Amigo por WhatsApp (Límite: 1 cada 30 min)</h3>
                     <div class="flex space-x-3">
@@ -312,10 +316,10 @@
             </div>
         </section>
 
-        <!-- VISTA 6: TOP 100 GANADORES -->
+        <!-- VISTA 6: TOP 100 -->
         <section id="vista-top100" class="view-section hidden space-y-4">
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
-                <h2 class="text-xl font-bold text-amber-400 mb-4"><i class="fa-solid fa-trophy"></i> Top 100 Jugadores (Modo Multijugador y Guapito)</h2>
+                <h2 class="text-xl font-bold text-amber-400 mb-4"><i class="fa-solid fa-trophy"></i> Top 100 Jugadores</h2>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left text-xs text-slate-300">
                         <thead class="bg-slate-950 text-amber-400 uppercase">
@@ -326,7 +330,7 @@
                                 <th class="p-3">Modo Principal</th>
                             </tr>
                         </thead>
-                        <tbody id="tabla-top100-body" class="divide-y divide-slate-800">
+                        <tbody class="divide-y divide-slate-800">
                             <tr>
                                 <td class="p-3 font-bold text-amber-400">1</td>
                                 <td class="p-3">Havana_King</td>
@@ -338,12 +342,6 @@
                                 <td class="p-3">El_As_De_Oros</td>
                                 <td class="p-3">385</td>
                                 <td class="p-3 text-emerald-400">Multijugador</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-bold text-amber-600">3</td>
-                                <td class="p-3">Guajiro_Fino</td>
-                                <td class="p-3">310</td>
-                                <td class="p-3 text-rose-400 font-semibold">Guapito</td>
                             </tr>
                         </tbody>
                     </table>
@@ -358,10 +356,9 @@
         <section id="vista-tyc" class="view-section hidden space-y-4">
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl space-y-4 text-xs text-slate-300">
                 <h2 class="text-xl font-bold text-amber-400"><i class="fa-solid fa-shield-halved"></i> Términos, Leyes y Auditoría Antifraude</h2>
-                <p>1. <strong>Naturaleza de las Fichas:</strong> Las unidades de entretenimiento y fichas no constituyen moneda de curso legal directo fuera de las plataformas autorizadas. El canje en dinero real (CUP) opera mediante solicitudes controladas hacia tarjetas bancarias oficiales.</p>
-                <p>2. <strong>Comisión de la Casa (Rake):</strong> Se retiene automáticamente el 10% del pozo total al finalizar cada partida competitiva para el mantenimiento de servidores y operaciones.</p>
-                <p>3. <strong>Transferencias y Comisiones:</strong> Las transferencias internas entre usuarios son estrictamente de fichas y deducen un 1% de tasa operativa.</p>
-                <p>4. <strong>Capas de Seguridad:</strong> El sistema cuenta con control de sesión única, barajado PRNG auditado, algoritmos anti-colusión (chip dumping), verificación KYC obligatoria para retiros y libro contable inmutable de doble entrada.</p>
+                <p>1. <strong>Naturaleza de las Fichas:</strong> Las unidades de entretenimiento no constituyen moneda de curso legal fuera de la app.</p>
+                <p>2. <strong>Comisión de la Casa (Rake):</strong> Se retiene automáticamente el 10% del pozo total al finalizar cada partida.</p>
+                <p>3. <strong>Transferencias:</strong> Las transferencias internas entre usuarios deducen un 1% de tasa operativa.</p>
             </div>
             <div class="text-center">
                 <button onclick="cambiarVista('menu')" class="text-xs text-slate-400 hover:text-slate-200 underline">Volver al Menú Principal</button>
@@ -375,27 +372,147 @@
         <p>&copy; 2026 El Trío - Tradición Cubana & Casino Tecnológico Avanzado. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- SCRIPT LOGICA JAVASCRIPT OPTIMIZADA -->
+    <!-- MOTOR JAVASCRIPT REESTRUCTURADO Y CORREGIDO -->
     <script>
-        // Estado Global de la App Optimizada
+        // Mazo Recortado Cubano de 32 Cartas (Sin 2, 3, 4, 5)
+        const VALORES = ['A', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+        const PALOS = [
+            { nombre: 'Picas', simbolo: '♠', color: 'text-slate-900' },
+            { nombre: 'Corazones', simbolo: '♥', color: 'text-red-600' },
+            { nombre: 'Treboles', simbolo: '♣', color: 'text-slate-900' },
+            { nombre: 'Diamantes', simbolo: '♦', color: 'text-red-600' }
+        ];
+
+        let mazoGlobal = [];
+        let cartasMesa = [];
+        let misCartas = [];
+        let seleccionadasParaDescarte = new Set();
+        let pozoActual = 120;
+        let rondaActual = 1;
         let usuarioActual = null;
-        let modoSeleccionadoPendiente = null;
         let ultimoEnvioWhatsApp = parseInt(localStorage.getItem('eltrio_ultimo_wa') || '0');
 
-        // Base de Datos Simulada en LocalStorage de Alto Rendimiento
-        function obtenerDB() {
-            let db = localStorage.getItem('eltrio_db');
-            if (!db) {
-                db = { usuarios: {}, transacciones: [], mesasPublicas: [] };
-                localStorage.setItem('eltrio_db', JSON.stringify(db));
-            } else {
-                db = JSON.parse(db);
-            }
-            return db;
+        function crearMazoRecortado() {
+            mazoGlobal = [];
+            VALORES.forEach(val => {
+                PALOS.forEach(palo => {
+                    mazoGlobal.push({ valor: val, palo: palo.simbolo, color: palo.color, id: Math.random().toString(36).substring(2, 9) });
+                });
+            });
+            // Barajado Aleatorio (PRNG)
+            mazoGlobal.sort(() => Math.random() - 0.5);
         }
 
-        function guardarDB(db) {
-            localStorage.setItem('eltrio_db', JSON.stringify(db));
+        function renderizarNaipeHTML(carta, esComunitaria = false, indice = null) {
+            const estaSeleccionada = seleccionadasParaDescarte.has(indice);
+            const claseSeleccion = estaSeleccionada ? 'card-selected' : '';
+            const eventoClick = !esComunitaria ? `onclick="toggleSeleccionCarta(${indice})"` : '';
+
+            return `
+                <div ${eventoClick} class="card-casino ${claseSeleccion} w-20 h-28 md:w-24 md:h-36 flex flex-col justify-between p-2 font-bold select-none bg-white">
+                    <!-- Esquina Superior Izquierda (Al derecho) -->
+                    <div class="text-left text-xs leading-none ${carta.color}">
+                        <div>${carta.valor}</div>
+                        <div>${carta.palo}</div>
+                    </div>
+                    <!-- Símbolo Central -->
+                    <div class="text-center my-auto text-2xl md:text-3xl ${carta.color}">${carta.palo}</div>
+                    <!-- Esquina Inferior Derecha (Invertida pero con texto al derecho) -->
+                    <div class="flex flex-col items-end text-xs leading-none ${carta.color}">
+                        <div>${carta.valor}</div>
+                        <div>${carta.palo}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleSeleccionCarta(index) {
+            if (seleccionadasParaDescarte.has(index)) {
+                seleccionadasParaDescarte.delete(index);
+            } else {
+                seleccionadasParaDescarte.add(index);
+            }
+            actualizarInterfazCartas();
+        }
+
+        function actualizarInterfazCartas() {
+            // Renderizar Mano del Jugador
+            const contenedorMano = document.getElementById('tus-cartas');
+            contenedorMano.innerHTML = misCartas.map((c, idx) => renderizarNaipeHTML(c, false, idx)).join('');
+            
+            // Actualizar texto de selección
+            document.getElementById('cant-descarte-txt').innerText = `${seleccionadasParaDescarte.size} para descartar`;
+
+            // Renderizar Mesa Comunitaria
+            const contenedorMesa = document.getElementById('cartas-comunitarias');
+            contenedorMesa.innerHTML = cartasMesa.map(c => renderizarNaipeHTML(c, true)).join('');
+
+            // Indicadores de Estado
+            document.getElementById('lbl-pozo').innerText = pozoActual;
+            document.getElementById('lbl-ronda').innerText = rondaActual;
+        }
+
+        function descartarYPedir() {
+            if (seleccionadasParaDescarte.size === 0) {
+                // Si no seleccionó ninguna, se toma una nueva carta de forma directa
+                if (mazoGlobal.length > 0) {
+                    misCartas.push(mazoGlobal.pop());
+                    registrarLog("Pediste 1 carta nueva del mazo.");
+                }
+            } else {
+                // Reemplazar cartas seleccionadas por cartas nuevas del mazo
+                let indices = Array.from(seleccionadasParaDescarte).sort((a, b) => b - a);
+                indices.forEach(idx => {
+                    if (mazoGlobal.length > 0) {
+                        misCartas[idx] = mazoGlobal.pop();
+                    }
+                });
+                registrarLog(`Descartaste ${indices.length} cartas y recibiste nuevas.`);
+                seleccionadasParaDescarte.clear();
+            }
+
+            if (rondaActual < 3) {
+                rondaActual++;
+            }
+            actualizarInterfazCartas();
+        }
+
+        function registrarLog(mensaje) {
+            const log = document.getElementById('log-mesa');
+            const tiempo = new Date().toLocaleTimeString();
+            const msgEl = document.createElement('div');
+            msgEl.innerText = `[${tiempo}] ${mensaje}`;
+            log.appendChild(msgEl);
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function iniciarJuego(modo) {
+            cambiarVista('juego');
+            document.getElementById('lbl-modo-activo').innerText = modo.toUpperCase();
+            
+            // Inicializar Mazo y Repartir
+            crearMazoRecortado();
+            cartasMesa = [mazoGlobal.pop(), mazoGlobal.pop(), mazoGlobal.pop()];
+            misCartas = [mazoGlobal.pop(), mazoGlobal.pop()];
+            seleccionadasParaDescarte.clear();
+            pozoActual = 120;
+            rondaActual = 1;
+
+            actualizarInterfazCartas();
+            registrarLog(`Mesa iniciada en Modo ${modo.toUpperCase()}. Se repartieron 3 comunitarias y 2 en mano.`);
+        }
+
+        function accionJuego(tipo) {
+            if (tipo === 'apostar') {
+                pozoActual += 50;
+                registrarLog("Igualaste la apuesta (+50 fichas al pozo).");
+            } else if (tipo === 'allin') {
+                pozoActual += 200;
+                registrarLog("¡All-in parcial ejecutado! Pozo incrementado.");
+            } else if (tipo === 'pasar') {
+                registrarLog("Pasaste el turno.");
+            }
+            actualizarInterfazCartas();
         }
 
         function cambiarVista(vistaId) {
@@ -408,7 +525,6 @@
         }
 
         function verificarAccesoModo(modo) {
-            modoSeleccionadoPendiente = modo;
             let sesion = localStorage.getItem('eltrio_sesion_activa');
             if (!sesion) {
                 document.getElementById('auth-title').innerText = `Registro para Modo ${modo.toUpperCase()}`;
@@ -424,33 +540,13 @@
             event.preventDefault();
             let user = document.getElementById('auth-user').value.trim();
             let pass = document.getElementById('auth-pass').value;
-            let phone = document.getElementById('auth-phone').value;
-            let email = document.getElementById('auth-email').value;
-
-            let db = obtenerDB();
-            if (db.usuarios[user]) {
-                alert('El nombre de usuario ya está registrado. Por favor elige otro.');
-                return;
-            }
-
-            db.usuarios[user] = {
-                pass: pass,
-                phone: phone,
-                email: email,
-                fichasVirt: 1000,
-                fichasGuap: 500,
-                privacidadActiva: true,
-                bloqueados: []
-            };
-            guardarDB(db);
 
             let datosSesion = { username: user, fichasVirt: 1000, fichasGuap: 500 };
             localStorage.setItem('eltrio_sesion_activa', JSON.stringify(datosSesion));
             usuarioActual = datosSesion;
 
             actualizarBarraUsuario();
-            alert('¡Registro exitoso! Cuenta asegurada.');
-            iniciarJuego(modoSeleccionadoPendiente || 'multijugador');
+            iniciarJuego('multijugador');
         }
 
         function actualizarBarraUsuario() {
@@ -472,144 +568,60 @@
             cambiarVista('menu');
         }
 
-        // Motor del Juego Optimizado con Tarjetas Clásicas Fluidas
-        function iniciarJuego(modo) {
-            cambiarVista('juego');
-            document.getElementById('lbl-modo-activo').innerText = modo.toUpperCase();
-            
-            // Cartas Comunitarias con diseño clásico de casino optimizado
-            let cartasMesa = [
-                { valor: '7', palo: '♠', color: 'text-slate-900' },
-                { valor: 'J', palo: '♥', color: 'text-red-600' },
-                { valor: 'K', palo: '♣', color: 'text-slate-900' }
-            ];
-            
-            let htmlMesa = cartasMesa.map(c => `
-                <div class="card-casino w-20 h-28 md:w-24 md:h-36 flex flex-col justify-between p-2 font-bold select-none bg-white">
-                    <div class="text-left text-xs leading-none ${c.color}">
-                        <div>${c.valor}</div>
-                        <div>${c.palo}</div>
-                    </div>
-                    <div class="text-center my-auto text-2xl md:text-3xl ${c.color}">${c.palo}</div>
-                    <div class="text-right text-xs leading-none rotate-180 ${c.color}">
-                        <div>${c.valor}</div>
-                        <div>${c.palo}</div>
-                    </div>
-                </div>
-            `).join('');
-            document.getElementById('cartas-comunitarias').innerHTML = htmlMesa;
-
-            // Cartas en Mano del Jugador
-            let misCartas = [
-                { valor: 'A', palo: '♠', color: 'text-slate-900' },
-                { valor: '10', palo: '♦', color: 'text-red-600' }
-            ];
-
-            let htmlMis = misCartas.map(c => `
-                <div class="card-casino w-20 h-28 md:w-24 md:h-36 flex flex-col justify-between p-2 font-bold select-none bg-white">
-                    <div class="text-left text-xs leading-none ${c.color}">
-                        <div>${c.valor}</div>
-                        <div>${c.palo}</div>
-                    </div>
-                    <div class="text-center my-auto text-2xl md:text-3xl ${c.color}">${c.palo}</div>
-                    <div class="text-right text-xs leading-none rotate-180 ${c.color}">
-                        <div>${c.valor}</div>
-                        <div>${c.palo}</div>
-                    </div>
-                </div>
-            `).join('');
-            document.getElementById('tus-cartas').innerHTML = htmlMis;
-
-            document.getElementById('lbl-pozo').innerText = '120';
-            document.getElementById('lbl-ronda').innerText = '1';
-        }
-
-        function accionJuego(tipo) {
-            let log = document.getElementById('log-mesa');
-            let tiempo = new Date().toLocaleTimeString();
-            let msg = document.createElement('div');
-            
-            if (tipo === 'pedir') msg.innerText = `[${tiempo}] Pediste cambio de carta en mesa.`;
-            else if (tipo === 'apostar') msg.innerText = `[${tiempo}] Igualaste la apuesta obligatoria. Pozo incrementado.`;
-            else if (tipo === 'allin') msg.innerText = `[${tiempo}] All-in parcial ejecutado por tope de saldo.`;
-            else msg.innerText = `[${tiempo}] Pasaste el turno.`;
-
-            log.appendChild(msg);
-            log.scrollTop = log.scrollHeight;
-        }
-
         function salirMesa() {
             if (confirm('¿Seguro que deseas abandonar la mesa?')) {
                 cambiarVista('menu');
             }
         }
 
-        // Finanzas y Billetera Optimizada
         function comprarFichas(moneda) {
             let monto = moneda === 'USD' ? document.getElementById('input-usd').value : document.getElementById('input-cup').value;
-            if (!monto || monto <= 0) {
-                alert('Por favor ingresa un monto válido.');
-                return;
-            }
-            let fichasGanadas = moneda === 'USD' ? monto * 200 : monto * 2;
-            alert(`¡Compra procesada con éxito vía ${moneda}! Se acreditaron ${fichasGanadas} fichas a tu cuenta Guapito.`);
+            if (!monto || monto <= 0) return alert('Ingresa un monto válido.');
+            alert(`¡Compra procesada con éxito vía ${moneda}!`);
         }
 
         function realizarTransferenciaFichas() {
             let amigo = document.getElementById('trans-amigo').value.trim();
             let cant = parseInt(document.getElementById('trans-cant').value);
-            if (!amigo || !cant || cant <= 0) {
-                alert('Completa los datos correctamente.');
-                return;
-            }
-            let comision = Math.round(cant * 0.01);
-            alert(`Transferencia de ${cant} fichas a ${amigo} exitosa.\n(Comisión de la casa del 1%: ${comision} fichas retenidas). Nota: El dinero real nunca se transfiere entre usuarios.`);
+            if (!amigo || !cant || cant <= 0) return alert('Completa los datos correctamente.');
+            alert(`Transferencia de ${cant} fichas enviada a ${amigo} con 1% de comisión de la casa.`);
         }
 
         function solicitarRetiroCUP() {
             let cant = document.getElementById('retiro-cant').value;
             let tarjeta = document.getElementById('retiro-tarjeta').value;
-            if (!cant || !tarjeta || tarjeta.length < 16) {
-                alert('Ingresa una cantidad válida y un número de tarjeta CUP de 16 dígitos.');
-                return;
-            }
-            alert(`Solicitud de retiro de ${cant} fichas hacia la tarjeta ${tarjeta} registrada con éxito. La cuenta de la casa procesará la transferencia en CUP.`);
+            if (!cant || !tarjeta || tarjeta.length < 16) return alert('Verifica la cantidad y la tarjeta CUP.');
+            alert(`Solicitud de retiro registrada hacia la tarjeta ${tarjeta}.`);
         }
 
-        // Sistema Social Optimizado
         function enviarSolicitudAmistad() {
             let amigo = document.getElementById('input-buscar-amigo').value.trim();
-            if (!amigo) return;
-            alert(`Solicitud de amistad enviada a ${amigo}.`);
+            if (amigo) alert(`Solicitud enviada a ${amigo}.`);
         }
 
         function gestionarSolicitud(usuario, accion) {
-            alert(`Has seleccionado '${accion}' la solicitud de ${usuario}.`);
+            alert(`Has seleccionado '${accion}' para ${usuario}.`);
         }
 
         function crearMesaPublica() {
-            alert('Mesa pública creada con éxito. Los desconocidos pueden solicitar unirse antes de que empiece la 1ra ronda.');
+            alert('Mesa pública creada.');
         }
 
-        function solicitarUnirseMesa(mesaId) {
-            alert(`Solicitud enviada al creador de la mesa #${mesaId}. Esperando aceptación de admisión...`);
+        function solicitarUnirseMesa(id) {
+            alert(`Solicitud enviada a la mesa #${id}.`);
         }
 
         function enviarInvitacionWhatsApp() {
             let ahora = Date.now();
             if (ahora - ultimoEnvioWhatsApp < 30 * 60 * 1000) {
-                let minutosRestantes = Math.ceil((30 * 60 * 1000 - (ahora - ultimoEnvioWhatsApp)) / 60000);
-                alert(`Límite de seguridad anti-spam activado. Debes esperar ${minutosRestantes} minutos para enviar otra invitación de WhatsApp.`);
-                return;
+                let rest = Math.ceil((30 * 60 * 1000 - (ahora - ultimoEnvioWhatsApp)) / 60000);
+                return alert(`Límite anti-spam activo. Espera ${rest} minutos.`);
             }
             let tel = document.getElementById('wa-numero').value.trim();
-            if (!tel) {
-                alert('Ingresa un número de teléfono válido.');
-                return;
-            }
+            if (!tel) return alert('Ingresa un teléfono válido.');
             ultimoEnvioWhatsApp = ahora;
             localStorage.setItem('eltrio_ultimo_wa', ultimoEnvioWhatsApp);
-            window.open(`https://wa.me/${tel}?text=¡Te invito a una partida en El Trío Cubano! Únete aquí: https://eltriojuego.site/sala`, '_blank');
+            window.open(`https://wa.me/${tel}?text=¡Te invito a jugar El Trío Cubano!`, '_blank');
         }
     </script>
 </body>
