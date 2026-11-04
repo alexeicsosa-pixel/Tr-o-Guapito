@@ -12,23 +12,39 @@
             box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.7);
             border: 8px solid #0f172a;
         }
+        /* Estilo de Carta Cara Visible */
         .card-casino {
             background: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 8px 12px -2px rgba(0, 0, 0, 0.35);
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             transition: all 0.2s ease;
             position: relative;
             user-select: none;
-            border: 2px solid #cbd5e1;
+            border: 1px solid #cbd5e1;
             cursor: pointer;
         }
         .card-casino:hover {
             transform: translateY(-4px);
         }
         .card-selected {
-            transform: translateY(-12px) !important;
+            transform: translateY(-10px) !important;
             border-color: #f59e0b !important;
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.8) !important;
+            box-shadow: 0 0 12px rgba(245, 158, 11, 0.8) !important;
+        }
+        /* Estilo de Reverso de Carta (Negro Elegante) */
+        .card-back {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            border: 2px solid #334155;
+            border-radius: 6px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .card-back::after {
+            content: "♠";
+            color: #475569;
+            font-size: 1.2rem;
         }
         .view-section {
             animation: fadeIn 0.2s ease-in-out;
@@ -70,7 +86,7 @@
                     <div>
                         <div class="bg-sky-500/20 text-sky-400 p-3 rounded-full w-14 h-14 mx-auto flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-robot"></i></div>
                         <h3 class="text-xl font-bold text-slate-100">Práctica</h3>
-                        <p class="text-slate-400 text-xs mt-2">Juega contra Bot con evaluación real de combinaciones y cartas reveladas al final.</p>
+                        <p class="text-slate-400 text-xs mt-2">Juega contra Bot con cartas físicas en mesa, reversos negros y figuras ilustradas.</p>
                     </div>
                     <span class="mt-6 inline-block bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold py-2 px-4 rounded-lg">Jugar Práctica</span>
                 </div>
@@ -142,15 +158,15 @@
                 </div>
             </div>
 
-            <!-- Panel del Bot con Cartas Reveladas al Final -->
+            <!-- Panel del Bot / Rival con Cartas en Mesa Reducidas -->
             <div id="panel-bot" class="bg-slate-900 border border-sky-500/40 rounded-xl p-3 text-xs flex flex-col md:flex-row justify-between items-center shadow gap-2">
                 <div><i class="fa-solid fa-robot text-sky-400"></i> Bot Rival: <strong id="bot-estado-txt" class="text-sky-300">En juego...</strong></div>
-                <div id="bot-cartas-container" class="flex space-x-2 items-center">
-                    <span class="text-slate-400" id="bot-cartas-info">Cartas del Bot ocultas hasta el final</span>
+                <div id="bot-cartas-container" class="flex space-x-1.5 items-center">
+                    <span class="text-slate-400 mr-2" id="bot-cartas-info">Cartas en mesa:</span>
                 </div>
             </div>
 
-            <!-- Tapete de Casino -->
+            <!-- Tapete de Casino con Cartas Comunitarias -->
             <div class="casino-table rounded-2xl p-6 text-center relative min-h-[240px] flex flex-col justify-center items-center">
                 <span class="absolute top-3 left-4 text-xs font-bold text-emerald-200 uppercase tracking-widest bg-emerald-950/80 px-3 py-1 rounded border border-emerald-700/50">Mesa Cubana (3 Comunitarias Únicas)</span>
                 
@@ -164,10 +180,10 @@
                 <div class="md:col-span-3 bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col justify-between shadow">
                     <div>
                         <div class="flex justify-between items-center mb-3">
-                            <h3 class="text-xs font-bold text-slate-400">Tus Cartas en Mano (Haz clic para seleccionar descarte)</h3>
+                            <h3 class="text-xs font-bold text-slate-400">Tus Cartas en Mesa (Haz clic para seleccionar descarte)</h3>
                             <span id="cant-descarte-txt" class="text-[11px] text-amber-400 font-medium">0 seleccionadas</span>
                         </div>
-                        <div id="tus-cartas" class="flex space-x-4 mb-4 min-h-[120px] items-center"></div>
+                        <div id="tus-cartas" class="flex space-x-3 mb-4 min-h-[110px] items-center"></div>
                     </div>
                     
                     <div class="border-t border-slate-800 pt-3 flex flex-wrap gap-2 items-center justify-between">
@@ -192,9 +208,7 @@
 
         <!-- VISTAS SECUNDARIAS -->
         <section id="vista-billetera" class="view-section hidden space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
-                <h2 class="text-xl font-bold text-amber-400 mb-4"><i class="fa-solid fa-wallet"></i> Billetera y Modo Guapito</h2>
-            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl"><h2 class="text-xl font-bold text-amber-400">Billetera</h2></div>
             <div class="text-center"><button onclick="cambiarVista('menu')" class="text-xs text-slate-400 underline">Volver al Menú</button></div>
         </section>
         <section id="vista-amigos" class="view-section hidden space-y-6">
@@ -216,7 +230,7 @@
         <p>&copy; 2026 El Trío - Tradición Cubana & Casino Tecnológico Avanzado. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- SCRIPT LOGICA JAVASCRIPT CON EVALUACIÓN REAL Y REVELACIÓN DE BOT -->
+    <!-- SCRIPT CON CARTAS FÍSICAS EN MESA, REVERSOS NEGROS E ILUSTRACIONES DE FIGURAS -->
     <script>
         const VALORES = ['A', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
         const PALOS = [
@@ -226,7 +240,6 @@
             { nombre: 'Diamantes', simbolo: '♦', color: 'text-red-600', pesoPalo: 1 }
         ];
 
-        // Jerarquía de valores para evaluación de combinaciones cubanas
         const PESO_VALORES = { 'A': 14, 'K': 13, 'Q': 12, 'J': 11, '10': 10, '9': 9, '8': 8, '7': 7, '6': 6 };
 
         let mazoGlobal = [];
@@ -250,26 +263,35 @@
             mazoGlobal.sort(() => Math.random() - 0.5);
         }
 
-        function renderizarNaipeHTML(carta, esComunitaria = false, indice = null, oculto = false) {
-            if (oculto) {
-                return `
-                    <div class="w-16 h-24 md:w-20 md:h-28 bg-slate-800 border-2 border-slate-700 rounded-lg flex items-center justify-center shadow-md">
-                        <i class="fa-solid fa-shield-cat text-amber-500/50 text-xl"></i>
-                    </div>
-                `;
+        // Renderizado optimizado con ilustraciones para Ases y Figuras (J, Q, K) y tamaño reducido para mesa
+        function renderizarNaipeHTML(carta, esComunitaria = false, indice = null, miniatura = false, bocaAbajo = false) {
+            if (bocaAbajo) {
+                const wB = miniatura ? 'w-10 h-14' : 'w-16 h-24 md:w-20 md:h-28';
+                return `<div class="card-back ${wB}"></div>`;
             }
+
             const estaSeleccionada = seleccionadasParaDescarte.has(indice);
             const claseSeleccion = estaSeleccionada ? 'card-selected' : '';
-            const eventoClick = (!esComunitaria && !partidaTerminada) ? `onclick="toggleSeleccionCarta(${indice})"` : '';
+            const eventoClick = (!esComunitaria && !partidaTerminada && indice !== null) ? `onclick="toggleSeleccionCarta(${indice})"` : '';
+
+            const ancho = miniatura ? 'w-12 h-16 text-[9px]' : 'w-18 h-26 md:w-22 md:h-32 text-xs md:text-sm';
+            const centroTam = miniatura ? 'text-xs' : 'text-xl md:text-2xl';
+
+            // Ilustración temática para figuras y Ases
+            let iconoCentral = carta.palo;
+            if (carta.valor === 'A') iconoCentral = `<i class="fa-solid fa-shield-halved text-amber-500"></i>`;
+            else if (carta.valor === 'K') iconoCentral = `<i class="fa-solid fa-chess-king text-amber-600"></i>`;
+            else if (carta.valor === 'Q') iconoCentral = `<i class="fa-solid fa-chess-queen text-rose-600"></i>`;
+            else if (carta.valor === 'J') iconoCentral = `<i class="fa-solid fa-chess-knight text-sky-600"></i>`;
 
             return `
-                <div ${eventoClick} class="card-casino ${claseSeleccion} w-20 h-28 md:w-24 md:h-36 flex flex-col justify-between p-2 font-bold select-none bg-white">
-                    <div class="text-left text-xs leading-none ${carta.color}">
+                <div ${eventoClick} class="card-casino ${claseSeleccion} ${ancho} flex flex-col justify-between p-1 md:p-1.5 font-bold select-none bg-white">
+                    <div class="text-left leading-none ${carta.color}">
                         <div>${carta.valor}</div>
                         <div>${carta.palo}</div>
                     </div>
-                    <div class="text-center my-auto text-2xl md:text-3xl ${carta.color}">${carta.palo}</div>
-                    <div class="flex flex-col items-end text-xs leading-none ${carta.color}">
+                    <div class="text-center my-auto ${centroTam}">${iconoCentral}</div>
+                    <div class="flex flex-col items-end leading-none ${carta.color}">
                         <div>${carta.valor}</div>
                         <div>${carta.palo}</div>
                     </div>
@@ -288,9 +310,13 @@
         }
 
         function actualizarInterfazCartas() {
-            document.getElementById('tus-cartas').innerHTML = misCartas.map((c, idx) => renderizarNaipeHTML(c, false, idx)).join('');
+            // Tus cartas físicas en mesa
+            document.getElementById('tus-cartas').innerHTML = misCartas.map((c, idx) => renderizarNaipeHTML(c, false, idx, false, false)).join('');
             document.getElementById('cant-descarte-txt').innerText = `${seleccionadasParaDescarte.size} para descartar`;
-            document.getElementById('cartas-comunitarias').innerHTML = cartasMesa.map(c => renderizarNaipeHTML(c, true)).join('');
+            
+            // Cartas comunitarias en mesa
+            document.getElementById('cartas-comunitarias').innerHTML = cartasMesa.map(c => renderizarNaipeHTML(c, true, null, false, false)).join('');
+            
             document.getElementById('lbl-pozo').innerText = pozoActual;
             document.getElementById('lbl-ronda').innerText = rondaActual;
             
@@ -298,9 +324,11 @@
                 document.getElementById('panel-bot').style.display = 'flex';
                 const containerBot = document.getElementById('bot-cartas-info');
                 if (partidaTerminada) {
-                    containerBot.innerHTML = `Cartas del Bot: ` + cartasBot.map(c => renderizarNaipeHTML(c, true, null, false)).join('');
+                    // Revelar cartas físicas del bot boca arriba al final
+                    containerBot.innerHTML = `<span class="text-emerald-400 mr-2 font-semibold">Cartas del Bot:</span>` + cartasBot.map(c => renderizarNaipeHTML(c, true, null, true, false)).join('');
                 } else {
-                    containerBot.innerHTML = `Cartas del Bot ocultas (${cartasBot.length} en mano)`;
+                    // Mostrar cartas del bot boca abajo con reverso negro durante la partida
+                    containerBot.innerHTML = `<span class="text-slate-400 mr-2">Cartas en mesa:</span>` + cartasBot.map(() => renderizarNaipeHTML(null, true, null, true, true)).join('');
                 }
             } else {
                 document.getElementById('panel-bot').style.display = 'none';
@@ -347,38 +375,35 @@
             }
         }
 
-        // Función para calcular la puntuación de la mano combinando las cartas en mano con las comunitarias de la mesa
         function calcularPuntuacionMano(cartasMano, comunitarias) {
             const todas = [...cartasMano, ...comunitarias];
-            // Contar frecuencias de valores
             let conteo = {};
             todas.forEach(c => {
                 conteo[c.valor] = (conteo[c.valor] || 0) + 1;
             });
 
+            let pares = 0;
+            let tieneTrio = false;
             let maxValorUnico = 0;
-            let tiene Trio = false;
-            let tienePar = false;
 
             for (let val in conteo) {
                 if (conteo[val] === 3) tieneTrio = true;
-                if (conteo[val] === 2) tienePar = true;
+                if (conteo[val] === 2) pares++;
                 if (PESO_VALORES[val] > maxValorUnico) {
                     maxValorUnico = PESO_VALORES[val];
                 }
             }
 
-            // Jerarquía: 3 = Trío absoluto, 2 = Par / Media, 1 = Carta alta
-            if (tieneTrio) return { score: 300 + maxValorUnico, desc: "Trío Absoluto" };
-            if (tienePar) return { score: 200 + maxValorUnico, desc: "Combinación (Media / Par)" };
-            return { score: 100 + maxValorUnico, desc: "Carta Alta / Chiquita" };
+            if (tieneTrio) return { score: 400 + maxValorUnico, desc: "Trío Absoluto" };
+            if (pares >= 2) return { score: 300 + maxValorUnico, desc: "Tanque (Dobles Pares)" };
+            if (pares === 1) return { score: 200 + maxValorUnico, desc: "Media (Par)" };
+            return { score: 100 + maxValorUnico, desc: "Chiquita (Carta Alta)" };
         }
 
         function finalizarPartida() {
             partidaTerminada = true;
             rondaActual = 3;
 
-            // Calcular puntuación real del Jugador y del Bot
             let puntajeJugador = calcularPuntuacionMano(misCartas, cartasMesa);
             let puntajeBot = calcularPuntuacionMano(cartasBot, cartasMesa);
 
@@ -387,7 +412,7 @@
                 `¡Has ganado con ${puntajeJugador.desc}!` : 
                 `¡El Bot rival ganó con ${puntajeBot.desc}!`;
             
-            actualizarInterfazCartas(); // Revela las cartas del bot en pantalla
+            actualizarInterfazCartas(); // Revela visualmente las cartas del bot boca arriba
 
             registrarLog(`*** FIN DE LA 3ª RONDA *** Tu jugada: ${puntajeJugador.desc} vs Bot: ${puntajeBot.desc}. ${ganadorTexto}`);
             document.getElementById('estado-ronda-txt').innerHTML = `<strong class="text-emerald-400">${ganadorTexto}</strong>`;
