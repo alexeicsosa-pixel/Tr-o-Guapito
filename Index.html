@@ -108,7 +108,7 @@
                     <div>
                         <div class="bg-sky-500/20 text-sky-400 p-3 rounded-full w-14 h-14 mx-auto flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-robot"></i></div>
                         <h3 class="text-xl font-bold text-slate-100">Práctica</h3>
-                        <p class="text-slate-400 text-xs mt-2">Juega contra Bot con descarte obligatorio elegido por el jugador.</p>
+                        <p class="text-slate-400 text-xs mt-2">Juega contra Bot con barajado estricto y cero cartas duplicadas.</p>
                     </div>
                     <span class="mt-6 inline-block bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold py-2 px-4 rounded-lg">Jugar Práctica</span>
                 </div>
@@ -223,7 +223,7 @@
                 <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col justify-between h-48 md:h-auto shadow">
                     <h3 class="text-xs font-bold text-slate-400 mb-2">Acciones de Mesa y Bot</h3>
                     <div id="log-mesa" class="bg-slate-950 border border-slate-800 rounded p-2 text-[11px] text-slate-300 overflow-y-auto flex-grow space-y-1">
-                        <div>[Sistema]: Partida lista. Reglas cubanas activas.</div>
+                        <div>[Sistema]: Partida lista. Reglas de extracción única activas.</div>
                     </div>
                 </div>
             </div>
@@ -286,7 +286,7 @@
         <p>&copy; 2026 El Trío - Tradición Cubana & Casino Tecnológico Avanzado. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- SCRIPT CON OBLIGATORIEDAD DE DESCARTE Y CONTROL DE JUGADOR -->
+    <!-- SCRIPT CON EXTRACCIÓN ÚNICA BLINDADA (SPLICE) -->
     <script>
         const VALORES = ['A', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
         const PALOS = [
@@ -415,17 +415,16 @@
         function turnoBot() {
             if (mazoGlobal.length === 0) return;
             let cartaDescartada = cartasBot.pop();
-            let cartaNueva = mazoGlobal.pop();
+            // Extracción única garantizada con splice desde el mazo global
+            let cartaNueva = mazoGlobal.splice(Math.floor(Math.random() * mazoGlobal.length), 1)[0];
             cartasBot.push(cartaNueva);
             document.getElementById('bot-estado-txt').innerText = `Descartó una carta y tomó 1 nueva.`;
             registrarLog(`[Bot Rival]: Descartó ${cartaDescartada.valor}${cartaDescartada.palo} y tomó 1 carta nueva.`);
         }
 
-        // CONTROL RIGUROSO: El jugador elige explícitamente qué cartas descarta
         function descartarYPedir() {
             if (partidaTerminada) return;
 
-            // Validación: Debe seleccionar al menos 1 carta para pedir/cambiar
             if (seleccionadasParaDescarte.size === 0) {
                 alert("Debes hacer clic y seleccionar al menos una carta de tu mano para descartar antes de pedir.");
                 document.getElementById('estado-ronda-txt').innerHTML = `<span class="text-rose-400 font-bold">¡Haz clic en tus cartas para seleccionar el descarte!</span>`;
@@ -435,7 +434,8 @@
             let indices = Array.from(seleccionadasParaDescarte).sort((a, b) => b - a);
             indices.forEach(idx => {
                 if (mazoGlobal.length > 0) {
-                    misCartas[idx] = mazoGlobal.pop();
+                    // Extracción única garantizada con splice desde el mazo global
+                    misCartas[idx] = mazoGlobal.splice(Math.floor(Math.random() * mazoGlobal.length), 1)[0];
                 }
             });
             registrarLog(`Descartaste ${indices.length} carta(s) elegida(s) y recibiste nuevas.`);
@@ -523,16 +523,28 @@
             document.getElementById('estado-ronda-txt').innerText = "Selecciona cartas de tu mano para descartar o pulsa 'Pedir / Cambiar'.";
             
             crearMazoRecortado();
-            cartasMesa = [mazoGlobal.pop(), mazoGlobal.pop(), mazoGlobal.pop()];
-            misCartas = [mazoGlobal.pop(), mazoGlobal.pop()];
-            cartasBot = [mazoGlobal.pop(), mazoGlobal.pop()];
+            
+            // Extracción única estricta de 3 comunitarias, 2 tuyas y 2 del bot usando splice
+            cartasMesa = [
+                mazoGlobal.splice(0, 1)[0],
+                mazoGlobal.splice(0, 1)[0],
+                mazoGlobal.splice(0, 1)[0]
+            ];
+            misCartas = [
+                mazoGlobal.splice(0, 1)[0],
+                mazoGlobal.splice(0, 1)[0]
+            ];
+            cartasBot = [
+                mazoGlobal.splice(0, 1)[0],
+                mazoGlobal.splice(0, 1)[0]
+            ];
 
             seleccionadasParaDescarte.clear();
             pozoActual = 120;
             rondaActual = 1;
 
             actualizarInterfazCartas();
-            registrarLog(`Mesa iniciada en Modo ${modo.toUpperCase()}. Se repartieron 3 comunitarias y 2 en mano.`);
+            registrarLog(`Mesa iniciada en Modo ${modo.toUpperCase()}. Repartidas 3 comunitarias y 2 en mano sin duplicados.`);
         }
 
         function accionJuego(tipo) {
