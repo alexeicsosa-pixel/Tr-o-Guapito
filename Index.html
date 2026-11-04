@@ -7,29 +7,40 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Estilo Paño de Casino Verde Profesional */
+        /* Estilo Paño de Casino Verde Profesional Optimizado */
         .casino-table {
             background: radial-gradient(circle, #065f46 0%, #022c22 100%);
-            box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.6);
+            box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.7);
             border: 8px solid #0f172a;
         }
-        /* Estilo de Carta de Casino */
+        /* Estilo de Carta de Casino Clásica Fluida */
         .card-casino {
             background: #ffffff;
             color: #0f172a;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-            transition: transform 0.2s;
+            border-radius: 10px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #cbd5e1;
         }
         .card-casino:hover {
-            transform: translateY(-4px);
+            transform: translateY(-6px);
+            box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+        .view-section {
+            animation: fadeIn 0.25s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between">
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col justify-between selection:bg-amber-500 selection:text-slate-950">
 
     <!-- HEADER / NAVEGACIÓN -->
-    <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex flex-wrap justify-between items-center shadow-md">
+    <header class="bg-slate-900 border-b border-slate-800 px-6 py-4 flex flex-wrap justify-between items-center shadow-md sticky top-0 z-50">
         <div class="flex items-center space-x-3 cursor-pointer" onclick="cambiarVista('menu')">
             <i class="fa-solid fa-diamond text-red-500 text-2xl"></i>
             <h1 class="text-xl font-bold tracking-wider text-amber-400">EL TRÍO <span class="text-xs bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded border border-amber-500/30">CUBANO & CASINO</span></h1>
@@ -86,9 +97,9 @@
             </div>
 
             <div class="flex flex-wrap justify-center gap-4 mt-6">
-                <button onclick="cambiarVista('top100')" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 text-amber-400 px-4 py-2 rounded-lg text-sm font-medium"><i class="fa-solid fa-trophy"></i> Top 100 Ganadores</button>
-                <button onclick="cambiarVista('amigos')" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 text-sky-400 px-4 py-2 rounded-lg text-sm font-medium"><i class="fa-solid fa-user-group"></i> Amigos y Lobby</button>
-                <button onclick="cambiarVista('tyc')" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 px-4 py-2 rounded-lg text-sm font-medium"><i class="fa-solid fa-shield-halved"></i> Términos y Leyes</button>
+                <button onclick="cambiarVista('top100')" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 text-amber-400 px-4 py-2 rounded-lg text-sm font-medium transition"><i class="fa-solid fa-trophy"></i> Top 100 Ganadores</button>
+                <button onclick="cambiarVista('amigos')" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 text-sky-400 px-4 py-2 rounded-lg text-sm font-medium transition"><i class="fa-solid fa-user-group"></i> Amigos y Lobby</button>
+                <button onclick="cambiarVista('tyc')" class="bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 px-4 py-2 rounded-lg text-sm font-medium transition"><i class="fa-solid fa-shield-halved"></i> Términos y Leyes</button>
             </div>
         </section>
 
@@ -125,22 +136,22 @@
             </div>
         </section>
 
-        <!-- VISTA 3: MESA DE JUEGO (EL TRÍO - PAÑO VERDE PROFESIONAL) -->
+        <!-- VISTA 3: MESA DE JUEGO (EL TRÍO - PAÑO VERDE Y CARTAS CLÁSICAS) -->
         <section id="vista-juego" class="view-section hidden space-y-4">
-            <div class="flex justify-between items-center bg-slate-900 border border-slate-800 px-4 py-2 rounded-lg text-sm">
+            <div class="flex justify-between items-center bg-slate-900 border border-slate-800 px-4 py-2 rounded-lg text-sm shadow">
                 <div><span class="text-amber-400 font-bold" id="lbl-modo-activo">Práctica</span> | Mesa #: <span id="lbl-mesa-id">101</span></div>
                 <div class="space-x-4">
                     <span>Pozo: <strong id="lbl-pozo" class="text-emerald-400">0</strong> fichas</span>
                     <span>Ronda: <strong id="lbl-ronda" class="text-sky-400">1</strong>/3</span>
-                    <button onclick="salirMesa()" class="bg-rose-600 hover:bg-rose-500 px-2 py-1 rounded text-xs">Abandonar Mesa</button>
+                    <button onclick="salirMesa()" class="bg-rose-600 hover:bg-rose-500 px-2 py-1 rounded text-xs transition">Abandonar Mesa</button>
                 </div>
             </div>
 
             <!-- Zona de la Mesa con Paño Verde Profesional -->
-            <div class="casino-table rounded-2xl p-8 text-center relative min-h-[250px] flex flex-col justify-center items-center">
-                <span class="absolute top-3 left-4 text-xs font-bold text-emerald-200 uppercase tracking-widest bg-emerald-950/60 px-3 py-1 rounded border border-emerald-700/50">Mesa Cubana (Cartas Comunitarias Únicas)</span>
+            <div class="casino-table rounded-2xl p-8 text-center relative min-h-[260px] flex flex-col justify-center items-center shadow-inner">
+                <span class="absolute top-3 left-4 text-xs font-bold text-emerald-200 uppercase tracking-widest bg-emerald-950/70 px-3 py-1 rounded border border-emerald-700/50">Mesa Cubana (Cartas Comunitarias Únicas)</span>
                 <div id="cartas-comunitarias" class="flex justify-center space-x-4 my-4">
-                    <!-- Dinámico con imágenes de cartas -->
+                    <!-- Dinámico con Estilo de Cartas Clásicas -->
                 </div>
                 <div id="estado-ronda-txt" class="text-amber-300 text-xs font-semibold mt-2 tracking-wide">Esperando inicio de apuesta inicial obligatoria...</div>
             </div>
@@ -148,11 +159,11 @@
             <!-- Zona de Jugadores y Acciones -->
             <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <!-- Jugadores en la mesa -->
-                <div class="md:col-span-3 bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col justify-between">
+                <div class="md:col-span-3 bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col justify-between shadow">
                     <div>
                         <h3 class="text-xs font-bold text-slate-400 mb-3">Tus Cartas en Mano</h3>
                         <div id="tus-cartas" class="flex space-x-4 mb-4">
-                            <!-- Dinámico con imágenes de cartas -->
+                            <!-- Dinámico con Estilo de Cartas Clásicas -->
                         </div>
                     </div>
                     <div class="border-t border-slate-800 pt-3 flex flex-wrap gap-2 items-center justify-between">
@@ -166,7 +177,7 @@
                 </div>
 
                 <!-- Chat / Log de mesa -->
-                <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col justify-between h-48 md:h-auto">
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col justify-between h-48 md:h-auto shadow">
                     <h3 class="text-xs font-bold text-slate-400 mb-2">Acciones de Mesa</h3>
                     <div id="log-mesa" class="bg-slate-950 border border-slate-800 rounded p-2 text-[11px] text-slate-300 overflow-y-auto flex-grow space-y-1">
                         <div>[Sistema]: Partida iniciada bajo reglas cubanas.</div>
@@ -203,13 +214,13 @@
                             <span class="text-xs text-emerald-400 font-bold">Opción Internacional (USD)</span>
                             <p class="text-[11px] text-slate-400">Tarjetas de Débito/Crédito, Apple Pay, Google Pay.</p>
                             <input type="number" id="input-usd" placeholder="Monto en USD (Ej. 10)" class="w-full bg-slate-900 border border-slate-800 rounded px-3 py-1.5 text-sm">
-                            <button onclick="comprarFichas('USD')" class="w-full bg-emerald-600 hover:bg-emerald-500 py-2 rounded text-xs font-bold">Pagar con USD / ApplePay</button>
+                            <button onclick="comprarFichas('USD')" class="w-full bg-emerald-600 hover:bg-emerald-500 py-2 rounded text-xs font-bold transition">Pagar con USD / ApplePay</button>
                         </div>
                         <div class="bg-slate-950 p-4 rounded border border-slate-800 space-y-3">
                             <span class="text-xs text-amber-400 font-bold">Opción Nacional (CUP)</span>
                             <p class="text-[11px] text-slate-400">Tarjetas Bancarias Nacionales (BANDEC, BPA, Metropolitano).</p>
                             <input type="number" id="input-cup" placeholder="Monto en CUP (Ej. 500)" class="w-full bg-slate-900 border border-slate-800 rounded px-3 py-1.5 text-sm">
-                            <button onclick="comprarFichas('CUP')" class="w-full bg-amber-600 hover:bg-amber-500 py-2 rounded text-xs font-bold">Pagar con Tarjeta CUP</button>
+                            <button onclick="comprarFichas('CUP')" class="w-full bg-amber-600 hover:bg-amber-500 py-2 rounded text-xs font-bold transition">Pagar con Tarjeta CUP</button>
                         </div>
                     </div>
                 </div>
@@ -221,7 +232,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <input type="text" id="trans-amigo" placeholder="Usuario de destino" class="bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-sm">
                         <input type="number" id="trans-cant" placeholder="Cantidad de fichas" class="bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-sm">
-                        <button onclick="realizarTransferenciaFichas()" class="bg-sky-600 hover:bg-sky-500 py-1.5 rounded text-xs font-bold">Transferir Fichas</button>
+                        <button onclick="realizarTransferenciaFichas()" class="bg-sky-600 hover:bg-sky-500 py-1.5 rounded text-xs font-bold transition">Transferir Fichas</button>
                     </div>
                 </div>
 
@@ -231,7 +242,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <input type="number" id="retiro-cant" placeholder="Fichas a retirar" class="bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-sm">
                         <input type="text" id="retiro-tarjeta" placeholder="Número de Tarjeta CUP (16 dígitos)" class="bg-slate-950 border border-slate-800 rounded px-3 py-1.5 text-sm">
-                        <button onclick="solicitarRetiroCUP()" class="bg-rose-600 hover:bg-rose-500 py-1.5 rounded text-xs font-bold">Solicitar Retiro (CUP)</button>
+                        <button onclick="solicitarRetiroCUP()" class="bg-rose-600 hover:bg-rose-500 py-1.5 rounded text-xs font-bold transition">Solicitar Retiro (CUP)</button>
                     </div>
                 </div>
             </div>
@@ -251,7 +262,7 @@
                         <h3 class="text-xs font-bold text-slate-300">Buscar Usuario</h3>
                         <div class="flex space-x-2">
                             <input type="text" id="input-buscar-amigo" placeholder="Nombre de usuario" class="w-full bg-slate-900 border border-slate-800 rounded px-3 py-1 text-xs">
-                            <button onclick="enviarSolicitudAmistad()" class="bg-amber-600 hover:bg-amber-500 px-3 py-1 rounded text-xs font-bold">Agregar</button>
+                            <button onclick="enviarSolicitudAmistad()" class="bg-amber-600 hover:bg-amber-500 px-3 py-1 rounded text-xs font-bold transition">Agregar</button>
                         </div>
                         <div id="lista-amigos-res" class="text-xs text-slate-400 space-y-1 mt-2">
                             <div>Amigos conectados: <strong>Juan_99</strong>, <strong>Mari_CUB</strong></div>
@@ -264,9 +275,9 @@
                             <div class="flex justify-between items-center bg-slate-900 p-2 rounded">
                                 <span>Pedro_Poker te envió solicitud</span>
                                 <div class="space-x-1">
-                                    <button onclick="gestionarSolicitud('Pedro_Poker', 'aceptar')" class="bg-emerald-600 px-2 py-0.5 rounded text-[10px]">Aceptar</button>
-                                    <button onclick="gestionarSolicitud('Pedro_Poker', 'rechazar')" class="bg-rose-600 px-2 py-0.5 rounded text-[10px]">Rechazar</button>
-                                    <button onclick="gestionarSolicitud('Pedro_Poker', 'bloquear')" class="bg-slate-800 px-2 py-0.5 rounded text-[10px]">Bloquear</button>
+                                    <button onclick="gestionarSolicitud('Pedro_Poker', 'aceptar')" class="bg-emerald-600 hover:bg-emerald-500 px-2 py-0.5 rounded text-[10px] transition">Aceptar</button>
+                                    <button onclick="gestionarSolicitud('Pedro_Poker', 'rechazar')" class="bg-rose-600 hover:bg-rose-500 px-2 py-0.5 rounded text-[10px] transition">Rechazar</button>
+                                    <button onclick="gestionarSolicitud('Pedro_Poker', 'bloquear')" class="bg-slate-800 hover:bg-slate-700 px-2 py-0.5 rounded text-[10px] transition">Bloquear</button>
                                 </div>
                             </div>
                         </div>
@@ -277,12 +288,12 @@
                 <div class="border-t border-slate-800 pt-4 space-y-3">
                     <div class="flex justify-between items-center">
                         <h3 class="text-sm font-bold text-slate-200">Lobby Público (Unirse a Mesas de Desconocidos)</h3>
-                        <button onclick="crearMesaPublica()" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1 rounded text-xs font-bold">Crear Mesa Pública</button>
+                        <button onclick="crearMesaPublica()" class="bg-emerald-600 hover:bg-emerald-500 px-3 py-1 rounded text-xs font-bold transition">Crear Mesa Pública</button>
                     </div>
                     <div id="lista-mesas-publicas" class="space-y-2">
                         <div class="bg-slate-950 border border-slate-800 p-3 rounded flex justify-between items-center text-xs">
                             <div>Mesa de <strong>Carlos_Havana</strong> (Apuesta: 50 fichas) - Puestos: 2/4</div>
-                            <button onclick="solicitarUnirseMesa(102)" class="bg-sky-600 hover:bg-sky-500 px-3 py-1 rounded font-bold">Solicitar Unirse</button>
+                            <button onclick="solicitarUnirseMesa(102)" class="bg-sky-600 hover:bg-sky-500 px-3 py-1 rounded font-bold transition">Solicitar Unirse</button>
                         </div>
                     </div>
                 </div>
@@ -292,7 +303,7 @@
                     <h3 class="text-sm font-bold text-slate-200">Invitar Amigo por WhatsApp (Límite: 1 cada 30 min)</h3>
                     <div class="flex space-x-3">
                         <input type="text" id="wa-numero" placeholder="Teléfono WhatsApp (+55...)" class="bg-slate-950 border border-slate-800 rounded px-3 py-1 text-xs flex-grow">
-                        <button onclick="enviarInvitacionWhatsApp()" class="bg-emerald-600 hover:bg-emerald-500 px-4 py-1.5 rounded text-xs font-bold"><i class="fa-brands fa-whatsapp"></i> Enviar Enlace</button>
+                        <button onclick="enviarInvitacionWhatsApp()" class="bg-emerald-600 hover:bg-emerald-500 px-4 py-1.5 rounded text-xs font-bold transition"><i class="fa-brands fa-whatsapp"></i> Enviar Enlace</button>
                     </div>
                 </div>
             </div>
@@ -364,14 +375,14 @@
         <p>&copy; 2026 El Trío - Tradición Cubana & Casino Tecnológico Avanzado. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- SCRIPT LOGICA JAVASCRIPT -->
+    <!-- SCRIPT LOGICA JAVASCRIPT OPTIMIZADA -->
     <script>
-        // Estado Global de la App
+        // Estado Global de la App Optimizada
         let usuarioActual = null;
         let modoSeleccionadoPendiente = null;
-        let ultimoEnvioWhatsApp = 0;
+        let ultimoEnvioWhatsApp = parseInt(localStorage.getItem('eltrio_ultimo_wa') || '0');
 
-        // Base de Datos Simulada en LocalStorage
+        // Base de Datos Simulada en LocalStorage de Alto Rendimiento
         function obtenerDB() {
             let db = localStorage.getItem('eltrio_db');
             if (!db) {
@@ -389,8 +400,11 @@
 
         function cambiarVista(vistaId) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
-            document.getElementById(`vista-${vistaId}`).classList.remove('hidden');
-            window.scrollTo(0, 0);
+            const target = document.getElementById(`vista-${vistaId}`);
+            if (target) {
+                target.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
         }
 
         function verificarAccesoModo(modo) {
@@ -458,37 +472,50 @@
             cambiarVista('menu');
         }
 
-        // Motor del Juego con Tarjetas Visuales Profesionales
+        // Motor del Juego Optimizado con Tarjetas Clásicas Fluidas
         function iniciarJuego(modo) {
             cambiarVista('juego');
             document.getElementById('lbl-modo-activo').innerText = modo.toUpperCase();
             
-            // Simular Mazo de 32 cartas con representación gráfica profesional
+            // Cartas Comunitarias con diseño clásico de casino optimizado
             let cartasMesa = [
-                { nombre: '7 de Oros', simbolo: '🪙', color: 'text-amber-500' },
-                { nombre: 'Sota de Copas', simbolo: '🍷', color: 'text-rose-600' },
-                { nombre: 'Rey de Espadas', simbolo: '⚔️', color: 'text-slate-900' }
+                { valor: '7', palo: '♠', color: 'text-slate-900' },
+                { valor: 'J', palo: '♥', color: 'text-red-600' },
+                { valor: 'K', palo: '♣', color: 'text-slate-900' }
             ];
             
             let htmlMesa = cartasMesa.map(c => `
-                <div class="card-casino w-20 h-28 md:w-24 md:h-36 flex flex-col justify-between p-2 border border-slate-300 font-bold text-left">
-                    <div class="text-xs ${c.color}">${c.simbolo}</div>
-                    <div class="text-center my-auto text-xl md:text-2xl ${c.color}">${c.simbolo}</div>
-                    <div class="text-[10px] md:text-xs text-right ${c.color}">${c.nombre.split(' ')[0]}</div>
+                <div class="card-casino w-20 h-28 md:w-24 md:h-36 flex flex-col justify-between p-2 font-bold select-none bg-white">
+                    <div class="text-left text-xs leading-none ${c.color}">
+                        <div>${c.valor}</div>
+                        <div>${c.palo}</div>
+                    </div>
+                    <div class="text-center my-auto text-2xl md:text-3xl ${c.color}">${c.palo}</div>
+                    <div class="text-right text-xs leading-none rotate-180 ${c.color}">
+                        <div>${c.valor}</div>
+                        <div>${c.palo}</div>
+                    </div>
                 </div>
             `).join('');
             document.getElementById('cartas-comunitarias').innerHTML = htmlMesa;
 
+            // Cartas en Mano del Jugador
             let misCartas = [
-                { nombre: 'As de Oros', simbolo: '🪙', color: 'text-amber-500' },
-                { nombre: '10 de Copas', simbolo: '🍷', color: 'text-rose-600' }
+                { valor: 'A', palo: '♠', color: 'text-slate-900' },
+                { valor: '10', palo: '♦', color: 'text-red-600' }
             ];
 
             let htmlMis = misCartas.map(c => `
-                <div class="card-casino w-20 h-28 md:w-24 md:h-36 flex flex-col justify-between p-2 border border-slate-300 font-bold text-left">
-                    <div class="text-xs ${c.color}">${c.simbolo}</div>
-                    <div class="text-center my-auto text-xl md:text-2xl ${c.color}">${c.simbolo}</div>
-                    <div class="text-[10px] md:text-xs text-right ${c.color}">${c.nombre.split(' ')[0]}</div>
+                <div class="card-casino w-20 h-28 md:w-24 md:h-36 flex flex-col justify-between p-2 font-bold select-none bg-white">
+                    <div class="text-left text-xs leading-none ${c.color}">
+                        <div>${c.valor}</div>
+                        <div>${c.palo}</div>
+                    </div>
+                    <div class="text-center my-auto text-2xl md:text-3xl ${c.color}">${c.palo}</div>
+                    <div class="text-right text-xs leading-none rotate-180 ${c.color}">
+                        <div>${c.valor}</div>
+                        <div>${c.palo}</div>
+                    </div>
                 </div>
             `).join('');
             document.getElementById('tus-cartas').innerHTML = htmlMis;
@@ -517,7 +544,7 @@
             }
         }
 
-        // Finanzas y Billetera
+        // Finanzas y Billetera Optimizada
         function comprarFichas(moneda) {
             let monto = moneda === 'USD' ? document.getElementById('input-usd').value : document.getElementById('input-cup').value;
             if (!monto || monto <= 0) {
@@ -536,7 +563,6 @@
                 return;
             }
             let comision = Math.round(cant * 0.01);
-            let totalDescontado = cant + comision;
             alert(`Transferencia de ${cant} fichas a ${amigo} exitosa.\n(Comisión de la casa del 1%: ${comision} fichas retenidas). Nota: El dinero real nunca se transfiere entre usuarios.`);
         }
 
@@ -550,7 +576,7 @@
             alert(`Solicitud de retiro de ${cant} fichas hacia la tarjeta ${tarjeta} registrada con éxito. La cuenta de la casa procesará la transferencia en CUP.`);
         }
 
-        // Sistema Social
+        // Sistema Social Optimizado
         function enviarSolicitudAmistad() {
             let amigo = document.getElementById('input-buscar-amigo').value.trim();
             if (!amigo) return;
@@ -582,6 +608,7 @@
                 return;
             }
             ultimoEnvioWhatsApp = ahora;
+            localStorage.setItem('eltrio_ultimo_wa', ultimoEnvioWhatsApp);
             window.open(`https://wa.me/${tel}?text=¡Te invito a una partida en El Trío Cubano! Únete aquí: https://eltriojuego.site/sala`, '_blank');
         }
     </script>
