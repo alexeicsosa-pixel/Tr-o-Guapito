@@ -7,13 +7,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Estilo Tapete Verde Casino */
         .casino-table {
             background: radial-gradient(circle, #065f46 0%, #022c22 100%);
             box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.7);
             border: 8px solid #0f172a;
         }
-        /* Estilo Naipe Clásico */
         .card-casino {
             background: #ffffff;
             border-radius: 8px;
@@ -72,7 +70,7 @@
                     <div>
                         <div class="bg-sky-500/20 text-sky-400 p-3 rounded-full w-14 h-14 mx-auto flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-robot"></i></div>
                         <h3 class="text-xl font-bold text-slate-100">Práctica</h3>
-                        <p class="text-slate-400 text-xs mt-2">Juega contra Bot con IA. Visualiza sus descartes y jugadas paso a paso.</p>
+                        <p class="text-slate-400 text-xs mt-2">Juega contra Bot con evaluación real de combinaciones y cartas reveladas al final.</p>
                     </div>
                     <span class="mt-6 inline-block bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold py-2 px-4 rounded-lg">Jugar Práctica</span>
                 </div>
@@ -133,7 +131,7 @@
             </div>
         </section>
 
-        <!-- VISTA 3: MESA DE JUEGO OPTIMIZADA -->
+        <!-- VISTA 3: MESA DE JUEGO -->
         <section id="vista-juego" class="view-section hidden space-y-4">
             <div class="flex justify-between items-center bg-slate-900 border border-slate-800 px-4 py-2 rounded-lg text-sm shadow">
                 <div><span class="text-amber-400 font-bold" id="lbl-modo-activo">Práctica</span> | Mesa #: <span id="lbl-mesa-id">101</span></div>
@@ -144,19 +142,19 @@
                 </div>
             </div>
 
-            <!-- Panel Informativo del Bot (Modo Práctica) -->
-            <div id="panel-bot" class="bg-slate-900 border border-sky-500/40 rounded-xl p-3 text-xs flex justify-between items-center shadow">
-                <div><i class="fa-solid fa-robot text-sky-400"></i> Estado del Bot Rival: <strong id="bot-estado-txt" class="text-sky-300">Esperando tu jugada...</strong></div>
-                <div id="bot-cartas-info" class="text-slate-400">Cartas del Bot en mano: 2</div>
+            <!-- Panel del Bot con Cartas Reveladas al Final -->
+            <div id="panel-bot" class="bg-slate-900 border border-sky-500/40 rounded-xl p-3 text-xs flex flex-col md:flex-row justify-between items-center shadow gap-2">
+                <div><i class="fa-solid fa-robot text-sky-400"></i> Bot Rival: <strong id="bot-estado-txt" class="text-sky-300">En juego...</strong></div>
+                <div id="bot-cartas-container" class="flex space-x-2 items-center">
+                    <span class="text-slate-400" id="bot-cartas-info">Cartas del Bot ocultas hasta el final</span>
+                </div>
             </div>
 
             <!-- Tapete de Casino -->
             <div class="casino-table rounded-2xl p-6 text-center relative min-h-[240px] flex flex-col justify-center items-center">
                 <span class="absolute top-3 left-4 text-xs font-bold text-emerald-200 uppercase tracking-widest bg-emerald-950/80 px-3 py-1 rounded border border-emerald-700/50">Mesa Cubana (3 Comunitarias Únicas)</span>
                 
-                <div id="cartas-comunitarias" class="flex justify-center space-x-3 my-4">
-                    <!-- Naipes Comunitarios -->
-                </div>
+                <div id="cartas-comunitarias" class="flex justify-center space-x-3 my-4"></div>
                 
                 <div id="estado-ronda-txt" class="text-amber-300 text-xs font-semibold mt-1">Selecciona cartas de tu mano para descartar o pulsa 'Pedir / Cambiar'.</div>
             </div>
@@ -169,9 +167,7 @@
                             <h3 class="text-xs font-bold text-slate-400">Tus Cartas en Mano (Haz clic para seleccionar descarte)</h3>
                             <span id="cant-descarte-txt" class="text-[11px] text-amber-400 font-medium">0 seleccionadas</span>
                         </div>
-                        <div id="tus-cartas" class="flex space-x-4 mb-4 min-h-[120px] items-center">
-                            <!-- Naipes del Jugador -->
-                        </div>
+                        <div id="tus-cartas" class="flex space-x-4 mb-4 min-h-[120px] items-center"></div>
                     </div>
                     
                     <div class="border-t border-slate-800 pt-3 flex flex-wrap gap-2 items-center justify-between">
@@ -194,89 +190,44 @@
             </div>
         </section>
 
-        <!-- VISTA 4: BILLETERA -->
+        <!-- VISTAS SECUNDARIAS -->
         <section id="vista-billetera" class="view-section hidden space-y-6">
             <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
                 <h2 class="text-xl font-bold text-amber-400 mb-4"><i class="fa-solid fa-wallet"></i> Billetera y Modo Guapito</h2>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                    <div class="bg-slate-950 p-4 rounded-lg border border-slate-800">
-                        <span class="text-xs text-slate-400">Balance Fichas Virtuales</span>
-                        <div id="wallet-fichas-virt" class="text-2xl font-extrabold text-sky-400 mt-1">0</div>
-                    </div>
-                    <div class="bg-slate-950 p-4 rounded-lg border border-slate-800">
-                        <span class="text-xs text-slate-400">Balance Fichas Guapito (CUP/USD)</span>
-                        <div id="wallet-fichas-guap" class="text-2xl font-extrabold text-rose-400 mt-1">0</div>
-                    </div>
-                    <div class="bg-slate-950 p-4 rounded-lg border border-slate-800">
-                        <span class="text-xs text-slate-400">Cuenta de la Casa (Rake Acumulado)</span>
-                        <div class="text-2xl font-extrabold text-amber-400 mt-1">1,450 Fichas</div>
-                    </div>
-                </div>
             </div>
-            <div class="text-center">
-                <button onclick="cambiarVista('menu')" class="text-xs text-slate-400 hover:text-slate-200 underline">Volver al Menú Principal</button>
-            </div>
+            <div class="text-center"><button onclick="cambiarVista('menu')" class="text-xs text-slate-400 underline">Volver al Menú</button></div>
         </section>
-
-        <!-- VISTA 5: AMIGOS -->
         <section id="vista-amigos" class="view-section hidden space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl space-y-4">
-                <h2 class="text-xl font-bold text-amber-400"><i class="fa-solid fa-user-group"></i> Gestión Social y Lobby Público</h2>
-                <p class="text-xs text-slate-400">Busca amigos, acepta solicitudes o crea mesas públicas.</p>
-            </div>
-            <div class="text-center">
-                <button onclick="cambiarVista('menu')" class="text-xs text-slate-400 hover:text-slate-200 underline">Volver al Menú Principal</button>
-            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl"><h2 class="text-xl font-bold text-amber-400">Amigos</h2></div>
+            <div class="text-center"><button onclick="cambiarVista('menu')" class="text-xs text-slate-400 underline">Volver al Menú</button></div>
         </section>
-
-        <!-- VISTA 6: TOP 100 -->
         <section id="vista-top100" class="view-section hidden space-y-4">
-            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl">
-                <h2 class="text-xl font-bold text-amber-400 mb-4"><i class="fa-solid fa-trophy"></i> Top 100 Jugadores</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-slate-300">
-                        <thead class="bg-slate-950 text-amber-400 uppercase">
-                            <tr><th class="p-3">Pos</th><th class="p-3">Usuario</th><th class="p-3">Partidas Ganadas</th><th class="p-3">Modo</th></tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-800">
-                            <tr><td class="p-3 font-bold text-amber-400">1</td><td class="p-3">Havana_King</td><td class="p-3">420</td><td class="p-3 text-rose-400">Guapito</td></tr>
-                            <tr><td class="p-3 font-bold text-slate-300">2</td><td class="p-3">El_As_De_Oros</td><td class="p-3">385</td><td class="p-3 text-emerald-400">Multijugador</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="text-center">
-                <button onclick="cambiarVista('menu')" class="text-xs text-slate-400 hover:text-slate-200 underline">Volver al Menú Principal</button>
-            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl"><h2 class="text-xl font-bold text-amber-400">Top 100</h2></div>
+            <div class="text-center"><button onclick="cambiarVista('menu')" class="text-xs text-slate-400 underline">Volver al Menú</button></div>
         </section>
-
-        <!-- VISTA 7: TÉRMINOS -->
         <section id="vista-tyc" class="view-section hidden space-y-4">
-            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl space-y-4 text-xs text-slate-300">
-                <h2 class="text-xl font-bold text-amber-400"><i class="fa-solid fa-shield-halved"></i> Términos y Leyes</h2>
-                <p>Reglas de operación de la casa, comisiones de rake y políticas de juego responsable.</p>
-            </div>
-            <div class="text-center">
-                <button onclick="cambiarVista('menu')" class="text-xs text-slate-400 hover:text-slate-200 underline">Volver al Menú Principal</button>
-            </div>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl"><h2 class="text-xl font-bold text-amber-400">Términos</h2></div>
+            <div class="text-center"><button onclick="cambiarVista('menu')" class="text-xs text-slate-400 underline">Volver al Menú</button></div>
         </section>
 
     </main>
 
-    <!-- FOOTER -->
     <footer class="bg-slate-900 border-t border-slate-800 text-center py-4 text-xs text-slate-400">
         <p>&copy; 2026 El Trío - Tradición Cubana & Casino Tecnológico Avanzado. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- SCRIPT LOGICA JAVASCRIPT CORREGIDA -->
+    <!-- SCRIPT LOGICA JAVASCRIPT CON EVALUACIÓN REAL Y REVELACIÓN DE BOT -->
     <script>
         const VALORES = ['A', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
         const PALOS = [
-            { nombre: 'Picas', simbolo: '♠', color: 'text-slate-900' },
-            { nombre: 'Corazones', simbolo: '♥', color: 'text-red-600' },
-            { nombre: 'Treboles', simbolo: '♣', color: 'text-slate-900' },
-            { nombre: 'Diamantes', simbolo: '♦', color: 'text-red-600' }
+            { nombre: 'Picas', simbolo: '♠', color: 'text-slate-900', pesoPalo: 4 },
+            { nombre: 'Corazones', simbolo: '♥', color: 'text-red-600', pesoPalo: 3 },
+            { nombre: 'Treboles', simbolo: '♣', color: 'text-slate-900', pesoPalo: 2 },
+            { nombre: 'Diamantes', simbolo: '♦', color: 'text-red-600', pesoPalo: 1 }
         ];
+
+        // Jerarquía de valores para evaluación de combinaciones cubanas
+        const PESO_VALORES = { 'A': 14, 'K': 13, 'Q': 12, 'J': 11, '10': 10, '9': 9, '8': 8, '7': 7, '6': 6 };
 
         let mazoGlobal = [];
         let cartasMesa = [];
@@ -288,19 +239,25 @@
         let modoPartida = 'practica';
         let partidaTerminada = false;
         let usuarioActual = null;
-        let ultimoEnvioWhatsApp = parseInt(localStorage.getItem('eltrio_ultimo_wa') || '0');
 
         function crearMazoRecortado() {
             mazoGlobal = [];
             VALORES.forEach(val => {
                 PALOS.forEach(palo => {
-                    mazoGlobal.push({ valor: val, palo: palo.simbolo, color: palo.color, id: Math.random().toString(36).substring(2, 9) });
+                    mazoGlobal.push({ valor: val, palo: palo.simbolo, color: palo.color, peso: PESO_VALORES[val], pesoPalo: palo.pesoPalo, id: Math.random().toString(36).substring(2, 9) });
                 });
             });
             mazoGlobal.sort(() => Math.random() - 0.5);
         }
 
-        function renderizarNaipeHTML(carta, esComunitaria = false, indice = null) {
+        function renderizarNaipeHTML(carta, esComunitaria = false, indice = null, oculto = false) {
+            if (oculto) {
+                return `
+                    <div class="w-16 h-24 md:w-20 md:h-28 bg-slate-800 border-2 border-slate-700 rounded-lg flex items-center justify-center shadow-md">
+                        <i class="fa-solid fa-shield-cat text-amber-500/50 text-xl"></i>
+                    </div>
+                `;
+            }
             const estaSeleccionada = seleccionadasParaDescarte.has(indice);
             const claseSeleccion = estaSeleccionada ? 'card-selected' : '';
             const eventoClick = (!esComunitaria && !partidaTerminada) ? `onclick="toggleSeleccionCarta(${indice})"` : '';
@@ -339,7 +296,12 @@
             
             if (modoPartida === 'practica') {
                 document.getElementById('panel-bot').style.display = 'flex';
-                document.getElementById('bot-cartas-info').innerText = `Cartas del Bot: ${cartasBot.length}`;
+                const containerBot = document.getElementById('bot-cartas-info');
+                if (partidaTerminada) {
+                    containerBot.innerHTML = `Cartas del Bot: ` + cartasBot.map(c => renderizarNaipeHTML(c, true, null, false)).join('');
+                } else {
+                    containerBot.innerHTML = `Cartas del Bot ocultas (${cartasBot.length} en mano)`;
+                }
             } else {
                 document.getElementById('panel-bot').style.display = 'none';
             }
@@ -347,12 +309,10 @@
 
         function turnoBot() {
             if (mazoGlobal.length < 2) return;
-            // El bot descarta aleatoriamente 1 carta de su mano y pide 1 nueva
             let cartaDescartada = cartasBot.pop();
             let cartaNueva = mazoGlobal.pop();
             cartasBot.push(cartaNueva);
-
-            document.getElementById('bot-estado-txt').innerText = `Descartó una carta y pidió 1 nueva del mazo.`;
+            document.getElementById('bot-estado-txt').innerText = `Descartó una carta y tomó 1 nueva.`;
             registrarLog(`[Bot Rival]: Descartó ${cartaDescartada.valor}${cartaDescartada.palo} y tomó 1 carta nueva.`);
         }
 
@@ -375,34 +335,63 @@
                 seleccionadasParaDescarte.clear();
             }
 
-            // Ejecutar turno del Bot si estamos en modo práctica
             if (modoPartida === 'practica') {
                 turnoBot();
             }
 
-            // Control de Rondas (Máximo 3)
             if (rondaActual < 3) {
                 rondaActual++;
                 actualizarInterfazCartas();
             } else {
-                // Al llegar al final de la 3ra ronda, se cierra el juego y se define ganador
                 finalizarPartida();
             }
+        }
+
+        // Función para calcular la puntuación de la mano combinando las cartas en mano con las comunitarias de la mesa
+        function calcularPuntuacionMano(cartasMano, comunitarias) {
+            const todas = [...cartasMano, ...comunitarias];
+            // Contar frecuencias de valores
+            let conteo = {};
+            todas.forEach(c => {
+                conteo[c.valor] = (conteo[c.valor] || 0) + 1;
+            });
+
+            let maxValorUnico = 0;
+            let tiene Trio = false;
+            let tienePar = false;
+
+            for (let val in conteo) {
+                if (conteo[val] === 3) tieneTrio = true;
+                if (conteo[val] === 2) tienePar = true;
+                if (PESO_VALORES[val] > maxValorUnico) {
+                    maxValorUnico = PESO_VALORES[val];
+                }
+            }
+
+            // Jerarquía: 3 = Trío absoluto, 2 = Par / Media, 1 = Carta alta
+            if (tieneTrio) return { score: 300 + maxValorUnico, desc: "Trío Absoluto" };
+            if (tienePar) return { score: 200 + maxValorUnico, desc: "Combinación (Media / Par)" };
+            return { score: 100 + maxValorUnico, desc: "Carta Alta / Chiquita" };
         }
 
         function finalizarPartida() {
             partidaTerminada = true;
             rondaActual = 3;
-            actualizarInterfazCartas();
 
-            // Evaluar ganador aleatorio o por combinación simulada
-            let ganaJugador = Math.random() >= 0.3; // 70% probabilidad de victoria del usuario en práctica
-            let ganadorTexto = ganaJugador ? "¡Has ganado la partida con mejor combinación (Chiquita / Trío)!" : "¡El Bot rival ganó la partida con mejor juego en mesa!";
+            // Calcular puntuación real del Jugador y del Bot
+            let puntajeJugador = calcularPuntuacionMano(misCartas, cartasMesa);
+            let puntajeBot = calcularPuntuacionMano(cartasBot, cartasMesa);
+
+            let ganaJugador = puntajeJugador.score >= puntajeBot.score;
+            let ganadorTexto = ganaJugador ? 
+                `¡Has ganado con ${puntajeJugador.desc}!` : 
+                `¡El Bot rival ganó con ${puntajeBot.desc}!`;
             
-            registrarLog(`*** FIN DE LA 3ª RONDA *** ${ganadorTexto}`);
+            actualizarInterfazCartas(); // Revela las cartas del bot en pantalla
+
+            registrarLog(`*** FIN DE LA 3ª RONDA *** Tu jugada: ${puntajeJugador.desc} vs Bot: ${puntajeBot.desc}. ${ganadorTexto}`);
             document.getElementById('estado-ronda-txt').innerHTML = `<strong class="text-emerald-400">${ganadorTexto}</strong>`;
             
-            // Ocultar botones de acción y mostrar botón de reiniciar
             document.getElementById('btn-pedir').classList.add('hidden');
             document.getElementById('btn-reiniciar').classList.remove('hidden');
         }
@@ -432,7 +421,7 @@
             crearMazoRecortado();
             cartasMesa = [mazoGlobal.pop(), mazoGlobal.pop(), mazoGlobal.pop()];
             misCartas = [mazoGlobal.pop(), mazoGlobal.pop()];
-            cartasBot = [mazoGlobal.pop(), mazoGlobal.pop()]; // Cartas del Bot
+            cartasBot = [mazoGlobal.pop(), mazoGlobal.pop()];
             seleccionadasParaDescarte.clear();
             pozoActual = 120;
             rondaActual = 1;
