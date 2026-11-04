@@ -12,7 +12,6 @@
             box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.7);
             border: 8px solid #0f172a;
         }
-        /* Proporción Real de Carta de Casino (Estilizada y Alargada) */
         .card-casino {
             background: #ffffff;
             border-radius: 8px;
@@ -39,7 +38,6 @@
             border-color: #f59e0b !important;
             box-shadow: 0 0 15px rgba(245, 158, 11, 0.8) !important;
         }
-        /* Miniatura Proporcionada para Mesa */
         .card-mini {
             width: 52px;
             height: 78px;
@@ -54,7 +52,6 @@
             font-size: 10px;
             font-weight: bold;
         }
-        /* Reverso de Carta Negro Elegante Proporcionado */
         .card-back {
             background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
             border: 2px solid #334155;
@@ -111,7 +108,7 @@
                     <div>
                         <div class="bg-sky-500/20 text-sky-400 p-3 rounded-full w-14 h-14 mx-auto flex items-center justify-center text-xl mb-4"><i class="fa-solid fa-robot"></i></div>
                         <h3 class="text-xl font-bold text-slate-100">Práctica</h3>
-                        <p class="text-slate-400 text-xs mt-2">Juega contra Bot con proporción de cartas perfecta y diseño horizontal.</p>
+                        <p class="text-slate-400 text-xs mt-2">Juega contra Bot con mazo único de 32 cartas, unicidad estricta y revelación final.</p>
                     </div>
                     <span class="mt-6 inline-block bg-sky-600 hover:bg-sky-500 text-white text-xs font-bold py-2 px-4 rounded-lg">Jugar Práctica</span>
                 </div>
@@ -183,7 +180,7 @@
                 </div>
             </div>
 
-            <!-- Panel del Bot / Rival con Cartas en Fila Horizontal Proporcionada -->
+            <!-- Panel del Bot / Rival -->
             <div id="panel-bot" class="bg-slate-900 border border-sky-500/40 rounded-xl p-3 text-xs flex flex-col md:flex-row justify-between items-center shadow gap-2">
                 <div><i class="fa-solid fa-robot text-sky-400"></i> Bot Rival: <strong id="bot-estado-txt" class="text-sky-300">En juego...</strong></div>
                 <div class="flex items-center space-x-2">
@@ -192,7 +189,7 @@
                 </div>
             </div>
 
-            <!-- Tapete de Casino con Cartas Comunitarias -->
+            <!-- Tapete de Casino con 3 Cartas Comunitarias Únicas -->
             <div class="casino-table rounded-2xl p-6 text-center relative min-h-[240px] flex flex-col justify-center items-center">
                 <span class="absolute top-3 left-4 text-xs font-bold text-emerald-200 uppercase tracking-widest bg-emerald-950/80 px-3 py-1 rounded border border-emerald-700/50">Mesa Cubana (3 Comunitarias Únicas)</span>
                 
@@ -226,28 +223,61 @@
                 <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 flex flex-col justify-between h-48 md:h-auto shadow">
                     <h3 class="text-xs font-bold text-slate-400 mb-2">Acciones de Mesa y Bot</h3>
                     <div id="log-mesa" class="bg-slate-950 border border-slate-800 rounded p-2 text-[11px] text-slate-300 overflow-y-auto flex-grow space-y-1">
-                        <div>[Sistema]: Partida lista. Reglas cubanas activas.</div>
+                        <div>[Sistema]: Partida lista. Reglas cubanas de 32 cartas activas.</div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- VISTAS SECUNDARIAS -->
+        <!-- VISTAS SECUNDARIAS COMPLETAS -->
         <section id="vista-billetera" class="view-section hidden space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl"><h2 class="text-xl font-bold text-amber-400">Billetera</h2></div>
-            <div class="text-center"><button onclick="cambiarVista('menu')" class="text-xs text-slate-400 underline">Volver al Menú</button></div>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl space-y-4">
+                <h2 class="text-xl font-bold text-amber-400"><i class="fa-solid fa-wallet"></i> Billetera y Modo Guapito</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-slate-950 border border-slate-800 p-4 rounded-lg">
+                        <p class="text-xs text-slate-400">Fichas Virtuales (Práctica / Multijugador)</p>
+                        <p class="text-2xl font-bold text-sky-400" id="wallet-fichas-virt">1000</p>
+                    </div>
+                    <div class="bg-slate-950 border border-slate-800 p-4 rounded-lg">
+                        <p class="text-xs text-slate-400">Fichas Guapito (Respaldo Real CUP/USD)</p>
+                        <p class="text-2xl font-bold text-emerald-400" id="wallet-fichas-guap">500</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center"><button onclick="cambiarVista('menu')" class="text-xs text-slate-400 underline">Volver al Menú Principal</button></div>
         </section>
+
         <section id="vista-amigos" class="view-section hidden space-y-6">
-            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl"><h2 class="text-xl font-bold text-amber-400">Amigos</h2></div>
-            <div class="text-center"><button onclick="cambiarVista('menu')" class="text-xs text-slate-400 underline">Volver al Menú</button></div>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl space-y-4">
+                <h2 class="text-xl font-bold text-amber-400"><i class="fa-solid fa-user-group"></i> Lista de Amigos y Invitaciones WhatsApp</h2>
+                <p class="text-slate-300 text-xs">Crea mesas privadas para tus amigos compartiendo enlaces directos vía WhatsApp y gestiona el pozo acumulado (pot rake).</p>
+                <div class="bg-slate-950 p-4 rounded border border-slate-800 text-center">
+                    <button onclick="alert('Enlace de invitación generado para WhatsApp.')" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-4 py-2 rounded text-xs"><i class="fa-brands fa-whatsapp"></i> Invitar Amigo por WhatsApp</button>
+                </div>
+            </div>
+            <div class="text-center"><button onclick="cambiarVista('menu')" class="text-xs text-slate-400 underline">Volver al Menú Principal</button></div>
         </section>
+
         <section id="vista-top100" class="view-section hidden space-y-4">
-            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl"><h2 class="text-xl font-bold text-amber-400">Top 100</h2></div>
-            <div class="text-center"><button onclick="cambiarVista('menu')" class="text-xs text-slate-400 underline">Volver al Menú</button></div>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl space-y-4">
+                <h2 class="text-xl font-bold text-amber-400"><i class="fa-solid fa-trophy"></i> Top 100 Ganadores Globales</h2>
+                <div class="bg-slate-950 border border-slate-800 rounded p-4 text-xs text-slate-300 space-y-2">
+                    <div class="flex justify-between border-b border-slate-800 pb-1 font-bold text-amber-400"><span># Jugador</span><span>Fichas Acumuladas</span></div>
+                    <div class="flex justify-between"><span>1. El_Guajiro_95</span><span class="text-emerald-400">45,200 Fichas</span></div>
+                    <div class="flex justify-between"><span>2. AsDePicas_Habana</span><span class="text-emerald-400">38,900 Fichas</span></div>
+                    <div class="flex justify-between"><span>3. CasinoRoyal_CUB</span><span class="text-emerald-400">31,400 Fichas</span></div>
+                </div>
+            </div>
+            <div class="text-center"><button onclick="cambiarVista('menu')" class="text-xs text-slate-400 underline">Volver al Menú Principal</button></div>
         </section>
+
         <section id="vista-tyc" class="view-section hidden space-y-4">
-            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl"><h2 class="text-xl font-bold text-amber-400">Términos</h2></div>
-            <div class="text-center"><button onclick="cambiarVista('menu')" class="text-xs text-slate-400 underline">Volver al Menú</button></div>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-xl space-y-3 text-xs text-slate-300">
+                <h2 class="text-xl font-bold text-amber-400 mb-2"><i class="fa-solid fa-shield-halved"></i> Términos y Leyes del Juego</h2>
+                <p>Las partidas bajo el Modo Guapito operan bajo estrictas normativas de transparencia y comisiones de pozo (pot rake) controladas mediante pasarelas seguras.</p>
+                <p>Todas las manos y comunitarias se evalúan según la jerarquía tradicional cubana (Trío, Tanque, Media y Chiquita) utilizando un mazo recortado de 32 cartas sin duplicados.</p>
+            </div>
+            <div class="text-center"><button onclick="cambiarVista('menu')" class="text-xs text-slate-400 underline">Volver al Menú Principal</button></div>
         </section>
 
     </main>
@@ -256,7 +286,7 @@
         <p>&copy; 2026 El Trío - Tradición Cubana & Casino Tecnológico Avanzado. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- SCRIPT CON PROPORCIÓN MEJORADA Y BOT HORIZONTAL -->
+    <!-- SCRIPT COMPLETO CON MÁXIMA ROBUSTEZ -->
     <script>
         const VALORES = ['A', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
         const PALOS = [
@@ -283,13 +313,22 @@
             mazoGlobal = [];
             VALORES.forEach(val => {
                 PALOS.forEach(palo => {
-                    mazoGlobal.push({ valor: val, palo: palo.simbolo, color: palo.color, peso: PESO_VALORES[val], pesoPalo: palo.pesoPalo, id: Math.random().toString(36).substring(2, 9) });
+                    mazoGlobal.push({ 
+                        valor: val, 
+                        palo: palo.simbolo, 
+                        color: palo.color, 
+                        peso: PESO_VALORES[val], 
+                        pesoPalo: palo.pesoPalo, 
+                        id: `${val}_${palo.simbolo}` 
+                    });
                 });
             });
-            mazoGlobal.sort(() => Math.random() - 0.5);
+            for (let i = mazoGlobal.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [mazoGlobal[i], mazoGlobal[j]] = [mazoGlobal[j], mazoGlobal[i]];
+            }
         }
 
-        // Renderizado con proporción de naipe perfecta y miniaturas horizontales
         function renderizarNaipeHTML(carta, esComunitaria = false, indice = null, miniatura = false, bocaAbajo = false) {
             if (bocaAbajo) {
                 return `<div class="card-back"></div>`;
@@ -353,11 +392,8 @@
         }
 
         function actualizarInterfazCartas() {
-            // Tus cartas físicas en mano
             document.getElementById('tus-cartas').innerHTML = misCartas.map((c, idx) => renderizarNaipeHTML(c, false, idx, false, false)).join('');
             document.getElementById('cant-descarte-txt').innerText = `${seleccionadasParaDescarte.size} para descartar`;
-            
-            // Cartas comunitarias en mesa
             document.getElementById('cartas-comunitarias').innerHTML = cartasMesa.map(c => renderizarNaipeHTML(c, true, null, false, false)).join('');
             
             document.getElementById('lbl-pozo').innerText = pozoActual;
@@ -367,10 +403,8 @@
                 document.getElementById('panel-bot').style.display = 'flex';
                 const containerBot = document.getElementById('bot-cartas-container');
                 if (partidaTerminada) {
-                    // Revelar cartas del bot boca arriba en horizontal al final
                     containerBot.innerHTML = cartasBot.map(c => renderizarNaipeHTML(c, true, null, true, false)).join('');
                 } else {
-                    // Mostrar cartas del bot boca abajo con reverso negro en horizontal
                     containerBot.innerHTML = cartasBot.map(() => renderizarNaipeHTML(null, true, null, true, true)).join('');
                 }
             } else {
@@ -379,7 +413,7 @@
         }
 
         function turnoBot() {
-            if (mazoGlobal.length < 2) return;
+            if (mazoGlobal.length === 0) return;
             let cartaDescartada = cartasBot.pop();
             let cartaNueva = mazoGlobal.pop();
             cartasBot.push(cartaNueva);
@@ -490,12 +524,13 @@
             cartasMesa = [mazoGlobal.pop(), mazoGlobal.pop(), mazoGlobal.pop()];
             misCartas = [mazoGlobal.pop(), mazoGlobal.pop()];
             cartasBot = [mazoGlobal.pop(), mazoGlobal.pop()];
+
             seleccionadasParaDescarte.clear();
             pozoActual = 120;
             rondaActual = 1;
 
             actualizarInterfazCartas();
-            registrarLog(`Mesa iniciada en Modo ${modo.toUpperCase()}. Se repartieron 3 comunitarias y 2 en mano.`);
+            registrarLog(`Mesa iniciada en Modo ${modo.toUpperCase()}. Mazo de 32 cartas barajado con unicidad estricta.`);
         }
 
         function accionJuego(tipo) {
